@@ -1,6 +1,8 @@
 require "sinatra"
 require 'sinatra/flash'
 require_relative "authentication.rb"
+require_relative "models.rb"
+
 
 #the following urls are included in authentication.rb
 # GET /login
@@ -19,4 +21,22 @@ end
 get "/dashboard" do
 	authenticate!
 	erb :dashboard
+end
+
+post "/post/:id" do
+
+	authenticate!
+
+	@post=Post.get(params["id"])
+
+	if @post
+
+	end
+end
+
+post "/post/create" do
+
+
+
+
 end
