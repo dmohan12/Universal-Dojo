@@ -28,12 +28,8 @@ end
 
 get "/videos" do
 	authenticate!
-	@videos = Video.all
+	@videos = Video.all(id: current_user.id)
 	erb :videos
-end
-
-post "/posts/:id/delete" do
-	@post = Post.get(params["id"])
 end
 
 get "/dashboard" do
@@ -41,6 +37,25 @@ get "/dashboard" do
 	erb :dashboard
 end
 
-post "/post/create" do
+post "/post/create" do      #grabs backend code in creating a new post
+	authenticate!
+	vid=Video.new
+
+	if params["title"] && params["description"] && params["video_url"]
+		vid.title=params["title"]
+		vid.description=params["description"]
+		vid.video_url=params["video_url"]
+		vid.save
+		
+		v=Video.get(id: 1)
+		v.destroy
+	end 
+
+
 
 end
+
+get "/post/new" do       #erb to postVideo
+	authenticate!
+	erb :postVideo
+end 
