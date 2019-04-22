@@ -1,0 +1,34 @@
+<style>
+
+
+body {
+text-align:center;
+}
+
+
+.fileInput{
+    margin-left: 90px;
+    padding-bottom:10px;
+}
+h3{
+    padding:10px;
+}
+
+</style>
+
+<form action="/post/create" method="post">
+    <fieldset>
+        <legend>Video information:</legend>
+        Title:<br>
+        <input type="text" name="title"><br>
+        Description:<br>
+        <input type="text" name="description"><br>
+        Video URL:<br>
+        <input type="text" name="video_url" class="vid_form">
+        <h3>OR</h3>
+        <input type="file" id="myFile" class="fileInput"><br>
+
+
+        <input type="submit" style= "margin: 20px"value="Submit"><br>
+    </fieldset>
+</form>

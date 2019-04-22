@@ -26,8 +26,6 @@ post "/videos" do
 	end
 end
 
-
-
 get "/videos" do
 	authenticate!
 	@videos = Video.all(id: current_user.id)
@@ -43,7 +41,7 @@ end
 post "/post/create" do      #grabs backend code in creating a new post
 	authenticate!
 	vid=Video.new
-	ta = Tag.new
+	#ta = Tag.new
 
 	if params["title"] && params["description"] && params["video_url"]
 		vid.title=params["title"]
