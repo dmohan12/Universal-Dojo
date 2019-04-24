@@ -71,6 +71,7 @@ end
 class Tag
   include DataMapper::Resource
   property :id, Serial
+  property :tag_name, Text
   property :video_id, Integer
 end
 
