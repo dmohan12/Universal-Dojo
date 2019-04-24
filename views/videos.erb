@@ -19,12 +19,27 @@
     <h4>Description: <%= v.description  %></h4><br>
     <a data-fancybox href="<%=v.video_url %>">
         <%=v.title%>
+        <%#v.destroy%>
     </a>
+
+
+       <br>
+    <strong> Tags: </strong>
+    <%@tags.each do |t|%>
+        <%if t.video_id == v.id%>
+             <%=t.tag_name%>
+            <%#t.destroy%>
+        <%end%>
+    <%end%>
 
     <form action="/post/<%=v.id%>" method="get">
         <button  type="sumbit" class="button" name="id" > Delete </button>
     </form>
+
+
 <% end %>
+
+
 
 
 

@@ -19,7 +19,7 @@ end
 get "/videos" do
 	authenticate!
 	@videos = Video.all(user_id: current_user.id)
-	#@tags = Tag.all
+	@tags = Tag.all
 	erb :videos
 end
 
@@ -30,35 +30,36 @@ end
 
 post "/post/create" do      #grabs backend code in creating a new post
 	authenticate!
-	vid=Video.new
-	#ta = Tag.new
+	vid = Video.new
+	
 
 	if params["title"] && params["description"] && params["video_url"]
-		vid.title=params["title"]
-		vid.description=params["description"]
-		vid.video_url=params["video_url"]
-		vid.user_id=current_user.id
+		vid.title = params["title"]
+		vid.description = params["description"]
+		vid.video_url = params["video_url"]
+		vid.user_id = current_user.id
 		vid.save
 
 		#adding tags
 		if params["tag_name"]
 			t = params["tag_name"].split(",")
 			t.each do |tags|
+				ta = Tag.new
 				ta.tag_name = tags
 				ta.video_id = vid.id
 				ta.save
 			end
 			
 		end
-		
+		redirect "/videos"
 	end 
 
-	redirect "/videos"
+	
 
 end
 
 #post "/tags" do
-#	erb :postVideo
+#	erb :tags
 #end
 
 get "/post/new" do       #erb to postVideo
