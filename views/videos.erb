@@ -10,8 +10,8 @@
         <%=v.title%>
         <%#v.destroy%>
     </a>
-
-    <h6>Tags</h6>
+    <br>
+    <strong> Tags: </strong>
     <%@tags.each do |t|%>
         <%if t.video_id == v.id%>
              <%=t.tag_name%>

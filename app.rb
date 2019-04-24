@@ -18,7 +18,7 @@ end
 
 get "/videos" do
 	authenticate!
-	@videos = Video.all#(id: current_user.id)
+	@videos = Video.all(user_id: current_user.id)
 	@tags = Tag.all
 	erb :videos
 end
