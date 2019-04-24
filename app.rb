@@ -54,6 +54,8 @@ post "/post/create" do      #grabs backend code in creating a new post
 		redirect "/videos"
 	end 
 
+	
+
 end
 
 #post "/tags" do
@@ -64,3 +66,24 @@ get "/post/new" do       #erb to postVideo
 	authenticate!
 	erb :postVideo
 end 
+
+get "/post/:id" do   #delete function
+	authenticate!
+
+	
+		v=Video.get(params["id"])
+
+		if v
+			if v.user_id==current_user.id
+				v.destroy
+			else
+				erb :noPermission
+			end 
+
+			redirect "/videos"
+
+		else
+			erb :videoDNE
+		end 
+end 
+
