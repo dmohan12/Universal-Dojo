@@ -77,9 +77,7 @@ get "/post/delete/:id" do   #delete function
 			else
 				erb :noPermission
 			end 
-
 			redirect "/videos"
-
 		else
 			erb :videoDNE
 		end 

@@ -40,7 +40,6 @@ class Video
   property :user_id, Integer
   property :date, DateTime
   property :like_counter, Integer
-
 end
 
 class Like
