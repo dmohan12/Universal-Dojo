@@ -98,7 +98,7 @@ get "/post/:id/comment" do 	#adds comment
 	redirect "/videos"
 end
 
-get "/post/:id/comment/delete" do	#delete comment
+get "/post/:id/comment/delete" do	#will delete comment
 	authenticate!
 
 
