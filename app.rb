@@ -98,3 +98,11 @@ get "/post/:id/comment" do
 	redirect "/videos"
 end
 
+get "/post/:id/comment/delete" do
+	authenticate!
+
+
+
+	redirect "/videos"
+end
+

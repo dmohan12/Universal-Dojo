@@ -33,9 +33,11 @@
     <%end%>
     <br>
     <strong> Comments: </strong>
+    <br>
     <%@comments.each do |c|%>
         <%if c.video_id == v.id%>
-            <%=c.text%>
+            <%=current_user.email%> said: <%=c.text%>
+            <br>
         <%end%>
 
     <%end%>  
