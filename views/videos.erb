@@ -31,8 +31,21 @@
         <%end%>
         
     <%end%>
+    <br>
+    <strong> Comments: </strong>
+    <%@comments.each do |c|%>
+        <%if c.video_id == v.id%>
+            <%=c.text%>
+        <%end%>
+
+    <%end%>  
+
+    <form action="/post/<%=v.id%>/comment" method="get">
+        Enter comment: <input type="text" name="text">
+        <button type="submimt" class="button" > Send </button>
+    </form>
     
-    <form action="/post/<%=v.id%>" method="get">
+    <form action="/post/<%=v.id%>/delete" method="get">
         <button  type="sumbit" class="button" name="id" > Delete </button>
     </form>
 

@@ -20,6 +20,7 @@ get "/videos" do
 	authenticate!
 	@videos = Video.all(user_id: current_user.id)
 	@tags = Tag.all
+	@comments = Comment.all
 	erb :videos
 end
 
@@ -32,7 +33,6 @@ post "/post/create" do      #grabs backend code in creating a new post
 	authenticate!
 	vid = Video.new
 	
-
 	if params["title"] && params["description"] && params["video_url"]
 		vid.title = params["title"]
 		vid.description = params["description"]
@@ -53,9 +53,7 @@ post "/post/create" do      #grabs backend code in creating a new post
 		end
 		redirect "/videos"
 	end 
-
 	
-
 end
 
 #post "/tags" do
@@ -67,7 +65,7 @@ get "/post/new" do       #erb to postVideo
 	erb :postVideo
 end 
 
-get "/post/:id" do   #delete function
+get "/post/:id/delete" do   #delete function
 	authenticate!
 
 	
@@ -86,4 +84,17 @@ get "/post/:id" do   #delete function
 			erb :videoDNE
 		end 
 end 
+
+get "/post/:id/comment" do
+	authenticate!
+	v = Video.get(params["id"])
+	if params["text"]
+		t = Comment.new
+		t.user_id = current_user.id
+		t.video_id = v.id
+		t.text = params["text"]
+		t.save
+	end
+	redirect "/videos"
+end
 
