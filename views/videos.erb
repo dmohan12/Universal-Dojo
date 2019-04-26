@@ -15,26 +15,30 @@
 
 
 <% @videos.each  do |v| %>
-    <h3>Title: <%= v.title  %></h3> <br>
-    <h4>Description: <%= v.description  %></h4><br>
+    <h3>Title: <%= v.title  %></h3> 
+    <h4>Description: <%= v.description  %></h4>
     <a data-fancybox href="<%=v.video_url %>">
-        <%=v.title%>
+       <strong> <%=v.title%> </strong>
         <%#v.destroy%>
     </a>
-
-
-       <br>
+    <br>
+    
     <strong> Tags: </strong>
     <%@tags.each do |t|%>
         <%if t.video_id == v.id%>
              <%=t.tag_name%>
             <%#t.destroy%>
         <%end%>
+        
     <%end%>
-
+    
     <form action="/post/<%=v.id%>" method="get">
         <button  type="sumbit" class="button" name="id" > Delete </button>
     </form>
+
+    ----------
+    <br>
+    <br>
 
 
 <% end %>
