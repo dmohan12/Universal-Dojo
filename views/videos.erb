@@ -1,1 +1,52 @@
-<%  %>
+<style>
+
+.button{
+    margin:20px;
+    padding: 10px;
+
+}
+
+</style>
+
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+</head>
+
+
+<% @videos.each  do |v| %>
+    <h3>Title: <%= v.title  %></h3> 
+    <h4>Description: <%= v.description  %></h4>
+    <a data-fancybox href="<%=v.video_url %>">
+       <strong> <%=v.title%> </strong>
+        <%#v.destroy%>
+    </a>
+    <br>
+    
+    <strong> Tags: </strong>
+    <%@tags.each do |t|%>
+        <%if t.video_id == v.id%>
+             <%=t.tag_name%>
+            <%#t.destroy%>
+        <%end%>
+        
+    <%end%>
+    
+    <form action="/post/<%=v.id%>" method="get">
+        <button  type="sumbit" class="button" name="id" > Delete </button>
+    </form>
+
+    ----------
+    <br>
+    <br>
+
+
+<% end %>
+
+
+
+
+
+<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+

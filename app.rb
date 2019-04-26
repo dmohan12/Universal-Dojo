@@ -16,27 +16,74 @@ get "/" do
 	erb :index
 end
 
-post "/videos" do
-	@video = Video.new
-	if params["title"] && params["video_url"]
-		@video.title = params["title"]
-		@video.description = params["description"]
-		@video.video_url = params["video_url"]
-		@video.user_id = current_user.id
-	end
-end
-
 get "/videos" do
 	authenticate!
-	@videos = Video.all
+	@videos = Video.all(user_id: current_user.id)
+	@tags = Tag.all
 	erb :videos
-end
-
-post "/posts/:id/delete" do
-	@post = Post.get(params["id"])
 end
 
 get "/dashboard" do
 	authenticate!
 	erb :dashboard
 end
+
+post "/post/create" do      #grabs backend code in creating a new post
+	authenticate!
+	vid = Video.new
+	
+
+	if params["title"] && params["description"] && params["video_url"]
+		vid.title = params["title"]
+		vid.description = params["description"]
+		vid.video_url = params["video_url"]
+		vid.user_id = current_user.id
+		vid.save
+
+		#adding tags
+		if params["tag_name"]
+			t = params["tag_name"].split(",")
+			t.each do |tags|
+				ta = Tag.new
+				ta.tag_name = tags
+				ta.video_id = vid.id
+				ta.save
+			end
+			
+		end
+		redirect "/videos"
+	end 
+
+	
+
+end
+
+#post "/tags" do
+#	erb :tags
+#end
+
+get "/post/new" do       #erb to postVideo
+	authenticate!
+	erb :postVideo
+end 
+
+get "/post/:id" do   #delete function
+	authenticate!
+
+	
+		v=Video.get(params["id"])
+
+		if v
+			if v.user_id==current_user.id
+				v.destroy
+			else
+				erb :noPermission
+			end 
+
+			redirect "/videos"
+
+		else
+			erb :videoDNE
+		end 
+end 
+
