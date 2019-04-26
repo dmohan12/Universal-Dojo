@@ -39,7 +39,7 @@ class Video
   property :video_url, Text
   property :user_id, Integer
   property :date, DateTime
-
+  property :like_counter, Integer
 
 end
 

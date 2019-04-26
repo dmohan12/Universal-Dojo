@@ -26,19 +26,25 @@
     <strong> Tags: </strong>
     <%@tags.each do |t|%>
         <%if t.video_id == v.id%>
-             <%=t.tag_name%>
+             <%=t.tag_name%>,
             <%#t.destroy%>
         <%end%>
         
     <%end%>
     
-    <form action="/post/<%=v.id%>" method="get">
+    <form action="/post/delete/<%=v.id%>" method="get">
         <button  type="sumbit" class="button" name="id" > Delete </button>
+    </form>
+
+    <form action="/post/like/<%=v.id%>" method="get">
+        <button  type="sumbit" class="button" name="id" > Like </button>
     </form>
 
     ----------
     <br>
     <br>
+
+    Total Likes: <%= v.like_counter%>
 
 
 <% end %>

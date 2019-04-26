@@ -67,10 +67,8 @@ get "/post/new" do       #erb to postVideo
 	erb :postVideo
 end 
 
-get "/post/:id" do   #delete function
+get "/post/delete/:id" do   #delete function
 	authenticate!
-
-	
 		v=Video.get(params["id"])
 
 		if v
@@ -85,5 +83,27 @@ get "/post/:id" do   #delete function
 		else
 			erb :videoDNE
 		end 
+end 
+
+get "/post/like/:id" do   #like a video
+
+	if !Like.get(user_id: current_user.id)
+
+		l=Like.new
+		l.user_id=current_user.id
+		l.video_id=params["id"]
+		l.save
+
+		v=Video.get(params["id"])
+		v.like_counter+=1
+		v.save
+		redirect "/videos"
+	else 
+
+		redirect "/dashboard"
+
+	end 
+	
+
 end 
 
