@@ -114,7 +114,7 @@ get "/post/:id/delete" do   #delete function
 		end 
 end 
 
-get "/post/:id/comment" do
+get "/post/:id/comment" do 	#adds comment
 	authenticate!
 	v = Video.get(params["id"])
 	if params["text"] 
@@ -132,7 +132,7 @@ get "/post/:id/comment" do
 
 end
 
-get "/post/:id/comment/delete" do
+get "/post/:id/comment/delete" do	#will delete comment
 	authenticate!
 
 
