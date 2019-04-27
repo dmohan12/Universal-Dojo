@@ -16,9 +16,31 @@ get "/" do
 	erb :index
 end
 
+get "/users" do #shows all the users created
+	authenticate!
+	@users = User.all
+	erb :users
+end
+
+get "/users/:id/delete" do	#delete users if you are admin
+	authenticate!
+	u = User.get(params["id"])
+	v = Video.get(user_id: params["id"])
+	c = Comment.get(user_id: params["id"])
+
+	if current_user.role_id == 0
+		u.destroy
+		v.destroy
+		c.destroy
+	else
+		erb :noPermission
+	end
+
+end
+
 get "/videos" do
 	authenticate!
-	@videos = Video.all(user_id: current_user.id)
+	@videos = Video.all#(user_id: current_user.id)
 	@tags = Tag.all
 	@comments = Comment.all
 	erb :videos
@@ -26,7 +48,11 @@ end
 
 get "/dashboard" do
 	authenticate!
+	@videos = Video.all(user_id: current_user.id)
+	@tags = Tag.all
+	@comments = Comment.all
 	erb :dashboard
+	#erb :videos
 end
 
 post "/post/create" do      #grabs backend code in creating a new post
@@ -70,15 +96,18 @@ get "/post/:id/delete" do   #delete function
 
 	
 		v=Video.get(params["id"])
+		#c=Comment.get(video_id: params["id"])
 
 		if v
 			if v.user_id==current_user.id
 				v.destroy
+				#c.destroy
+				redirect "/videos"
 			else
 				erb :noPermission
 			end 
 
-			redirect "/videos"
+			
 
 		else
 			erb :videoDNE
@@ -88,14 +117,19 @@ end
 get "/post/:id/comment" do
 	authenticate!
 	v = Video.get(params["id"])
-	if params["text"]
+	if params["text"] 
 		t = Comment.new
 		t.user_id = current_user.id
 		t.video_id = v.id
 		t.text = params["text"]
-		t.save
+		if t.text != 0
+			t.save
+		end
 	end
+	
 	redirect "/videos"
+	
+
 end
 
 get "/post/:id/comment/delete" do
