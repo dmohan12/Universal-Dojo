@@ -6,6 +6,20 @@
 
 }
 
+.videos_style {
+  background-color: silver;
+  color: black;
+  margin: 20px;
+  padding: 20px;
+}
+
+.comment_box {
+  background-color: gainsboro;
+  color: black;
+  margin: 5px;
+  padding: 5px;
+}
+
 </style>
 
 
@@ -13,53 +27,54 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
 </head>
 
+<div class="videos_style">
+    <% @videos.each  do |v| %>
+        <h3>Title: <%= v.title  %></h3> 
+        <h4>Description: <%= v.description  %></h4>
+        <a data-fancybox href="<%=v.video_url %>">
+           <strong> <%=v.title%> </strong>
+        </a>
+        <br>
 
-<% @videos.each  do |v| %>
-    <h3>Title: <%= v.title  %></h3> 
-    <h4>Description: <%= v.description  %></h4>
-    <%=v.user_id%>: 
-    <a data-fancybox href="<%=v.video_url %>">
-       <strong> <%=v.title%> </strong>
-    </a>
-    <br>
-    
-    <strong> Tags: </strong>
-    <%@tags.each do |t|%>
-        
-        <%if t.video_id == v.id%>
-             <%=t.tag_name%> 
+        <strong> Tags: </strong>
+        <%@tags.each do |t|%>
+
+            <%if t.video_id == v.id%>
+                 <%=t.tag_name%> 
+            <%end%>
+            <%#t.destroy%>
         <%end%>
-        <%#t.destroy%>
-    <%end%>
-    <br>
-    <strong> Comments: </strong>
-    <br>
-    <%@comments.each do |c|%>
+        <br>
+        <strong> Comments: </strong>
+        <br>
+        <%@comments.each do |c|%>
+            <div class="container">
+                <%if c.video_id == v.id%>
+                    <div class="comment_box"><%=current_user.email%> said: <%=c.text%></div>
         
-        <%if c.video_id == v.id%>
-            <%=current_user.email%> said: <%=c.text%>
-            <br>
+                <%end%>
+            </div>
+            <%#c.destroy%>
+        <%end%>  
+
+        <form action="/post/<%=v.id%>/comment" method="get">
+            Enter comment: <input type="text" name="text">
+            <button type="submimt" class="button" name="comment"> Send </button>
+        </form>
+        <%if v.user_id == current_user.id || current_user.role_id == 0%>
+            <form action="/post/<%=v.id%>/delete" method="get">
+                <button  type="sumbit" class="button" name="id" > Delete </button>
+            </form>
         <%end%>
 
-        <%#c.destroy%>
-    <%end%>  
+        ----------
+        <br>
+        <br>
 
-    <form action="/post/<%=v.id%>/comment" method="get">
-        Enter comment: <input type="text" name="text">
-        <button type="submimt" class="button" name="comment"> Send </button>
-    </form>
-    
-    <form action="/post/<%=v.id%>/delete" method="get">
-        <button  type="sumbit" class="button" name="id" > Delete </button>
-    </form>
+        <%#v.destroy%>
 
-    ----------
-    <br>
-    <br>
-
-    <%#v.destroy%>
-
-<% end %>
+    <% end %>
+</div>
 
 
 
