@@ -43,6 +43,7 @@ get "/videos" do
 	@videos = Video.all#(user_id: current_user.id)
 	@tags = Tag.all
 	@comments = Comment.all
+	@users = User.all
 	erb :videos
 end
 
@@ -122,9 +123,8 @@ get "/post/:id/comment" do 	#adds comment
 		t.user_id = current_user.id
 		t.video_id = v.id
 		t.text = params["text"]
-		if t.text != 0
-			t.save
-		end
+		t.save
+
 	end
 	
 	redirect "/videos"
