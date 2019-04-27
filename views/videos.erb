@@ -17,7 +17,6 @@
 <% @videos.each  do |v| %>
     <h3>Title: <%= v.title  %></h3> 
     <h4>Description: <%= v.description  %></h4>
-    <%=v.user_id%>: 
     <a data-fancybox href="<%=v.video_url %>">
        <strong> <%=v.title%> </strong>
     </a>
