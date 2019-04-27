@@ -50,7 +50,7 @@
         <%@comments.each do |c|%>
             <div class="container">
                 <%if c.video_id == v.id%>
-                    <div class="comment_box"><%=current_user.email%> said: <%=c.text%></div>
+                    <div class="comment_box"><%=c.user_email%> said: <%=c.text%></div>
         
                 <%end%>
             </div>

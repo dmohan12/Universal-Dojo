@@ -123,6 +123,7 @@ get "/post/:id/comment" do 	#adds comment
 		t.user_id = current_user.id
 		t.video_id = v.id
 		t.text = params["text"]
+		t.user_email = current_user.email
 		t.save
 
 	end

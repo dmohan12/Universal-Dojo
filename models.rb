@@ -62,6 +62,7 @@ class Comment
   include DataMapper::Resource
   property :id, Serial
   property :user_id, Integer
+  property :user_email, Text
   property :video_id, Integer
   property :text, Text
   property :date, DateTime
