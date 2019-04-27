@@ -1,7 +1,16 @@
 require "sinatra"
 require 'sinatra/flash'
+require 'fog'
 require_relative "authentication.rb"
 require_relative "models.rb"
+
+
+connection = Fog::Storage.new({
+	:provider                 => 'AWS',
+	:aws_access_key_id        => 'AKIAJLLPHO3SZWYNOMWA',
+	:aws_secret_access_key    => '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'
+	})
+
 
 #the following urls are included in authentication.rb
 # GET /login
@@ -20,6 +29,15 @@ get "/users" do #shows all the users created
 	authenticate!
 	@users = User.all
 	erb :users
+end
+
+get "/users/:id/videos" do		#show other users dashboard
+	authenticate!
+	@user = User.all(id: params["id"])
+	@videos = Video.all(user_id: params["id"])
+	@tags = Tag.all
+	@comments = Comment.all
+	erb :user_profile
 end
 
 get "/users/:id/delete" do	#delete users if you are admin
