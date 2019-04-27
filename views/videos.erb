@@ -69,9 +69,9 @@
             <%#c.destroy%>
         <%end%>  
 
-        <form action="/post/<%=v.id%>/comment" method="get">
-            Enter comment: <input type="text" name="text">
-            <button type="submimt" class="button" name="comment"> Send </button>
+        <form action="/post/<%=v.id%>/comment" method="get" style="display: inline;">
+            Enter comment: <input type="text" name="text"/>
+            <input type="submit" value="Send" name="comment"/>  
         </form>
         <%if v.user_id == current_user.id || current_user.role_id == 0%>
             <form action="/post/<%=v.id%>/delete" method="get">
@@ -79,7 +79,6 @@
             </form>
         <%end%>
 
-        ----------
         <br>
         <br>
 
