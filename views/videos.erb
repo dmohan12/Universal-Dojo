@@ -27,8 +27,20 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
 </head>
 
+
 <div class="videos_style">
+
+
+
     <% @videos.each  do |v| %>
+        
+        <% @users.each do |u| %>
+            <%if u.id == v.user_id%>
+                <h2><%=u.email%>'s Video </h2>
+            <%end%>
+        <%end%>
+
+
         <h3>Title: <%= v.title  %></h3> 
         <h4>Description: <%= v.description  %></h4>
         <a data-fancybox href="<%=v.video_url %>">
