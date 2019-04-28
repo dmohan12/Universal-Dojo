@@ -70,6 +70,7 @@ get "/dashboard" do
 	@videos = Video.all(user_id: current_user.id)
 	@tags = Tag.all
 	@comments = Comment.all
+	@users = User.all
 	erb :dashboard
 	#erb :videos
 end
@@ -161,13 +162,25 @@ get "/post/like/:id" do   #like a video
 	if !Like.get(user_id: current_user.id)
 
 		l=Like.new
+		v=Video.get(params["id"])
+
 		l.user_id=current_user.id
 		l.video_id=params["id"]
 		l.save
 
-		v=Video.get(params["id"])
-		v.like_counter++
-		v.save
+		l2 = Like.all(user_id: params["id"])
+		l2.each do |like|
+			if like.user_id == l.user_id && like.video_id == l.video_id
+				current_like = Like.get(id: l.id)
+				current_like.destroy
+				l.save
+			else
+				v.like_counter = v.like_counter.to_i + 1
+				v.save
+			end
+
+		end
+		
 		redirect "/videos"
 	else 
 
