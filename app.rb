@@ -112,8 +112,6 @@ end
 
 get "/post/:id/delete" do   #delete function
 	authenticate!
-
-	
 		v=Video.get(params["id"])
 		#c=Comment.get(video_id: params["id"])
 
@@ -125,9 +123,7 @@ get "/post/:id/delete" do   #delete function
 			else
 				erb :noPermission
 			end 
-
-			
-
+			#redirect "/videos"
 		else
 			erb :videoDNE
 		end 
@@ -158,4 +154,27 @@ get "/post/:id/comment/delete" do	#will delete comment
 
 	redirect "/videos"
 end
+
+get "/post/like/:id" do   #like a video
+	authenticate!
+
+	if !Like.get(user_id: current_user.id)
+
+		l=Like.new
+		l.user_id=current_user.id
+		l.video_id=params["id"]
+		l.save
+
+		v=Video.get(params["id"])
+		v.like_counter++
+		v.save
+		redirect "/videos"
+	else 
+
+		redirect "/dashboard"
+
+	end 
+	
+
+end 
 

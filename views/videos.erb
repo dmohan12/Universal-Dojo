@@ -30,8 +30,6 @@
 
 <div class="videos_style">
 
-
-
     <% @videos.each  do |v| %>
         
         <% @users.each do |u| %>
@@ -78,13 +76,16 @@
                 <button  type="sumbit" class="button" name="id" > Delete </button>
             </form>
         <%end%>
-
-        <br>
+        <form action="/post/like/<%=v.id%>" method="get"  >
+            <input type="submit" value="Like" name="Like"> Total Likes:<%= v.like_counter%>
+        </form>
         <br>
 
         <%#v.destroy%>
+    <%end%>
+    
+    
 
-    <% end %>
 </div>
 
 
