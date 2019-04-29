@@ -66,3 +66,4 @@ def authenticate!
 		redirect "/login"
 	end
 end
+

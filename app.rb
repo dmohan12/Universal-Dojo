@@ -117,7 +117,7 @@ get "/post/:id/delete" do   #delete function
 		#c=Comment.get(video_id: params["id"])
 
 		if v
-			if v.user_id==current_user.id
+			if v.user_id==current_user.id || current_user.role_id == 0
 				v.destroy
 				#c.destroy
 				redirect "/videos"
@@ -168,19 +168,12 @@ get "/post/like/:id" do   #like a video
 		l.video_id=params["id"]
 		l.save
 
-		l2 = Like.all(user_id: params["id"])
-		l2.each do |like|
+		all_likes = Like.all(video_id: params["id"])
+		all_likes.each do |like|
 			if like.user_id == l.user_id && like.video_id == l.video_id
-				current_like = Like.get(id: l.id)
-				current_like.destroy
-				l.save
-			else
-				v.like_counter = v.like_counter.to_i + 1
-				v.save
+				l.destroy
 			end
-
 		end
-		
 		redirect "/videos"
 	else 
 

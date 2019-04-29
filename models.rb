@@ -19,7 +19,7 @@ class User
     property :role_id, Integer, default: 1
 
     def administrator?
-        return role_id == 0
+      return role_id == 0
     end
 
     def user?
@@ -39,7 +39,7 @@ class Video
   property :video_url, Text
   property :user_id, Integer
   property :date, DateTime
-  property :like_counter, Integer
+  property :like_counter, Integer, default: 0
 end
 
 class Like
