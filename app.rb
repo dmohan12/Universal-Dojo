@@ -193,12 +193,12 @@ get "/user/:id/follow" do	#follow someone
 		flash[:success] = "You followed #{@u.email}"
 		redirect back
 	else
-		flash[:success] = "Already following #{@u.email}"
+		flash[:error] = "Already following #{@u.email}"
 		redirect back
 	end
 end
 
-get "/user/:id/request" do 
+get "/user/:id/request" do 	#isnt working idk why
 	authenticate!
 	req = Request.first(their_id: params["id"], your_id: current_user.id)
 	@u = User.get(params["id"])
