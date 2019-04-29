@@ -54,13 +54,9 @@ post "/post/create" do      #grabs backend code in creating a new post
 		redirect "/videos"
 	end 
 
-	
 
 end
 
-#post "/tags" do
-#	erb :tags
-#end
 
 get "/post/new" do       #erb to postVideo
 	authenticate!
@@ -85,23 +81,24 @@ end
 
 get "/post/like/:id" do   #like a video
 
-	if !Like.get(user_id: current_user.id)
+	lyke=Like.all(video_id: params["id"]) & Like.all(user_id: current_user.id)
+	
 
+	if lyke != nil
+		redirect "/dashboard"
+	else 
 		l=Like.new
 		l.user_id=current_user.id
 		l.video_id=params["id"]
 		l.save
 
 		v=Video.get(params["id"])
-		v.like_counter+=1
+		count=v.like_counter
+		count=count+1
+		v.like_counter=count
 		v.save
 		redirect "/videos"
-	else 
-
-		redirect "/dashboard"
-
 	end 
-	
 
 end 
 
