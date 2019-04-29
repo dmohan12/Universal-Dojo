@@ -28,28 +28,6 @@
 </head>
 
 
-<<<<<<< HEAD
-<% @videos.each  do |v| %>
-    <h3>Title: <%= v.title  %></h3> 
-    <h4>Description: <%= v.description  %></h4>
-    <a data-fancybox href="<%=v.video_url %>">
-       <strong> <%=v.title%> </strong>
-        <%#v.destroy%>
-    </a>
-    <br>
-    
-    <strong> Tags: </strong>
-    <%@tags.each do |t|%>
-        <%if t.video_id == v.id%>
-             <%=t.tag_name%>,
-            <%#t.destroy%>
-        <%end%>
-    <%end%>
-    
-    <form action="/post/delete/<%=v.id%>" method="get">
-        <button  type="sumbit" class="button" name="id" > Delete </button>
-    </form>
-=======
 <div class="videos_style">
 
     <% @videos.each  do |v| %>
@@ -59,7 +37,6 @@
                 <h2> <a class="link" href="/users/<%=u.id%>/videos"> <%=u.email%></a></h2>
             <%end%>
         <%end%>
->>>>>>> 86fbeec0788467431593effb8c4697766de1c6fc
 
 
         <h3>Title: <%= v.title  %></h3> 

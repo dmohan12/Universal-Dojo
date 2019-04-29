@@ -1,16 +1,15 @@
 require "sinatra"
 require 'sinatra/flash'
-require 'fog'
+#require 'fog'
 require_relative "authentication.rb"
 require_relative "models.rb"
 
 
-connection = Fog::Storage.new({
-	:provider                 => 'AWS',
-	:aws_access_key_id        => 'AKIAJLLPHO3SZWYNOMWA',
-	:aws_secret_access_key    => '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'
-	})
-
+#connection = Fog::Storage.new({
+#	:provider                 => 'AWS',
+#	:aws_access_key_id        => 'AKIAJLLPHO3SZWYNOMWA',
+#	:aws_secret_access_key    => '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'
+#	})
 
 #the following urls are included in authentication.rb
 # GET /login
@@ -168,13 +167,6 @@ get "/post/like/:id" do   #like a video
 		l.user_id=current_user.id
 		l.video_id=params["id"]
 		l.save
-
-		all_likes = Like.all(video_id: params["id"])
-		all_likes.each do |like|
-			if like.user_id == l.user_id && like.video_id == l.video_id
-				l.destroy
-			end
-		end
 		redirect "/videos"
 	end 
 
