@@ -1,7 +1,16 @@
 require "sinatra"
 require 'sinatra/flash'
+require 'fog'
 require_relative "authentication.rb"
 require_relative "models.rb"
+
+
+connection = Fog::Storage.new({
+	:provider                 => 'AWS',
+	:aws_access_key_id        => 'AKIAJLLPHO3SZWYNOMWA',
+	:aws_secret_access_key    => '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'
+	})
+
 
 #the following urls are included in authentication.rb
 # GET /login
@@ -16,23 +25,60 @@ get "/" do
 	erb :index
 end
 
+get "/users" do #shows all the users created
+	authenticate!
+	@users = User.all
+	erb :users
+end
+
+get "/users/:id/videos" do		#show other users dashboard
+	authenticate!
+	@user = User.all(id: params["id"])
+	@videos = Video.all(user_id: params["id"])
+	@tags = Tag.all
+	@comments = Comment.all
+	erb :user_profile
+end
+
+get "/users/:id/delete" do	#delete users if you are admin
+	authenticate!
+	u = User.get(params["id"])
+	v = Video.get(user_id: params["id"])
+	c = Comment.get(user_id: params["id"])
+
+	if current_user.role_id == 0
+		u.destroy
+		v.destroy
+		c.destroy
+	else
+		erb :noPermission
+	end
+
+end
+
 get "/videos" do
 	authenticate!
-	@videos = Video.all(user_id: current_user.id)
+	@videos = Video.all#(user_id: current_user.id)
 	@tags = Tag.all
+	@comments = Comment.all
+	@users = User.all
 	erb :videos
 end
 
 get "/dashboard" do
 	authenticate!
+	@videos = Video.all(user_id: current_user.id)
+	@tags = Tag.all
+	@comments = Comment.all
+	@users = User.all
 	erb :dashboard
+	#erb :videos
 end
 
 post "/post/create" do      #grabs backend code in creating a new post
 	authenticate!
 	vid = Video.new
 	
-
 	if params["title"] && params["description"] && params["video_url"]
 		vid.title = params["title"]
 		vid.description = params["description"]
@@ -53,8 +99,7 @@ post "/post/create" do      #grabs backend code in creating a new post
 		end
 		redirect "/videos"
 	end 
-
-
+	
 end
 
 
@@ -63,23 +108,53 @@ get "/post/new" do       #erb to postVideo
 	erb :postVideo
 end 
 
-get "/post/delete/:id" do   #delete function
+get "/post/:id/delete" do   #delete function
 	authenticate!
 		v=Video.get(params["id"])
+		#c=Comment.get(video_id: params["id"])
 
 		if v
-			if v.user_id==current_user.id
+			if v.user_id==current_user.id || current_user.role_id == 0
 				v.destroy
+				#c.destroy
+				redirect "/videos"
 			else
 				erb :noPermission
 			end 
-			redirect "/videos"
+			#redirect "/videos"
 		else
 			erb :videoDNE
 		end 
 end 
 
+get "/post/:id/comment" do 	#adds comment
+	authenticate!
+	v = Video.get(params["id"])
+	if params["text"] 
+		t = Comment.new
+		t.user_id = current_user.id
+		t.video_id = v.id
+		t.text = params["text"]
+		t.user_email = current_user.email
+		t.save
+
+	end
+	
+	redirect "/videos"
+	
+
+end
+
+get "/post/:id/comment/delete" do	#will delete comment
+	authenticate!
+
+
+
+	redirect "/videos"
+end
+
 get "/post/like/:id" do   #like a video
+	authenticate!
 
 	lyke=Like.all(video_id: params["id"]) & Like.all(user_id: current_user.id)
 	
@@ -88,15 +163,18 @@ get "/post/like/:id" do   #like a video
 		redirect "/dashboard"
 	else 
 		l=Like.new
+		v=Video.get(params["id"])
+
 		l.user_id=current_user.id
 		l.video_id=params["id"]
 		l.save
 
-		v=Video.get(params["id"])
-		count=v.like_counter
-		count=count+1
-		v.like_counter=count
-		v.save
+		all_likes = Like.all(video_id: params["id"])
+		all_likes.each do |like|
+			if like.user_id == l.user_id && like.video_id == l.video_id
+				l.destroy
+			end
+		end
 		redirect "/videos"
 	end 
 

@@ -27,41 +27,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
 </head>
 
+<h1>
+    <% @user.each do |u| %>
+        <%=u.email%>'s Profile
 
-<<<<<<< HEAD
-<% @videos.each  do |v| %>
-    <h3>Title: <%= v.title  %></h3> 
-    <h4>Description: <%= v.description  %></h4>
-    <a data-fancybox href="<%=v.video_url %>">
-       <strong> <%=v.title%> </strong>
-        <%#v.destroy%>
-    </a>
-    <br>
-    
-    <strong> Tags: </strong>
-    <%@tags.each do |t|%>
-        <%if t.video_id == v.id%>
-             <%=t.tag_name%>,
-            <%#t.destroy%>
-        <%end%>
     <%end%>
-    
-    <form action="/post/delete/<%=v.id%>" method="get">
-        <button  type="sumbit" class="button" name="id" > Delete </button>
-    </form>
-=======
+
+</h1>
+
 <div class="videos_style">
-
     <% @videos.each  do |v| %>
-        
-        <% @users.each do |u| %>
-            <%if u.id == v.user_id%>
-                <h2> <a class="link" href="/users/<%=u.id%>/videos"> <%=u.email%></a></h2>
-            <%end%>
-        <%end%>
->>>>>>> 86fbeec0788467431593effb8c4697766de1c6fc
-
-
         <h3>Title: <%= v.title  %></h3> 
         <h4>Description: <%= v.description  %></h4>
         <a data-fancybox href="<%=v.video_url %>">
@@ -99,18 +74,11 @@
                 <button  type="sumbit" class="button" name="id" > Delete </button>
             </form>
         <%end%>
-        <% #v.like_counter = 0%>
-        
-        <form action="/post/like/<%=v.id%>" method="get"  >
-            <input type="submit" value="Like" name="Like"> Total Likes: <%= v.like_counter%>
-        </form>
-        <br>
+
 
         <%#v.destroy%>
-    <%end%>
-    
-    
 
+    <% end %>
 </div>
 
 

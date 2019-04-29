@@ -1,5 +1,16 @@
+<style>
+.videos {
+  background-color: silver;
+  color: black;
+  margin: 20px;
+  padding: 20px;
+}
+</style> 
 <div class="container">
 	<h1>Dashboard for <%= current_user.email %></h1>
+	<div class="videos">
+		<h3>Your Videos</h3>
+		<%= erb :videos %>
+	</div>
 
-	<p>Here's your stuff.</p>
 </div>
