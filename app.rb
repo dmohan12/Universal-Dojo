@@ -43,13 +43,14 @@ end
 get "/users/:id/delete" do	#delete users if you are admin
 	authenticate!
 	u = User.get(params["id"])
-	v = Video.get(user_id: params["id"])
-	c = Comment.get(user_id: params["id"])
+	v = Video.all(user_id: params["id"])
+	c = Comment.all(user_id: params["id"])
 
 	if current_user.role_id == 0
 		u.destroy
 		v.destroy
 		c.destroy
+		redirect "/users"
 	else
 		erb :noPermission
 	end
@@ -62,6 +63,7 @@ get "/videos" do
 	@tags = Tag.all
 	@comments = Comment.all
 	@users = User.all
+	@follows = Follow.all(your_id: current_user.id)
 	erb :videos
 end
 
@@ -159,28 +161,60 @@ end
 get "/post/like/:id" do   #like a video
 	authenticate!
 
-	if !Like.get(user_id: current_user.id)
+	lyke = Like.first(video_id: params["id"], user_id: current_user.id)
+	if lyke != nil
+		flash[:error] = "You already liked this post"
+		redirect "/videos"
 
-		l=Like.new
-		v=Video.get(params["id"])
+	else
+		l = Like.new
+		v = Video.get(params["id"])
+		v.like_counter+=1
+		v.save
 
 		l.user_id=current_user.id
-		l.video_id=params["id"]
+		l.video_id = params["id"]
 		l.save
-
-		all_likes = Like.all(video_id: params["id"])
-		all_likes.each do |like|
-			if like.user_id == l.user_id && like.video_id == l.video_id
-				l.destroy
-			end
-		end
 		redirect "/videos"
-	else 
-
-		redirect "/dashboard"
-
-	end 
-	
+	end
 
 end 
+
+
+get "/user/:id/follow" do	#follow someone
+	authenticate!
+	fllw = Follow.first(their_id: params["id"], your_id: current_user.id)
+	@u = User.get(params["id"])
+	if fllw == nil
+		f = Follow.new
+		f.their_id = params["id"]
+		f.your_id = current_user.id
+		f.save
+		flash[:success] = "You followed #{@u.email}"
+		redirect back
+	else
+		flash[:success] = "Already following #{@u.email}"
+		redirect back
+	end
+end
+
+get "/user/:id/request" do 
+	authenticate!
+	req = Request.first(their_id: params["id"], your_id: current_user.id)
+	@u = User.get(params["id"])
+
+	if req == nil
+		r = Request.new
+		r.their_id = params["id"]
+		r.your_id = current_user.id
+		r.save
+		flash[:success] = "You requested to follow #{@u.email}"
+		redirect back
+	else
+		flash[:error] = "You already requested to follow #{@u.email}"
+		redirect back
+	end
+
+
+end
 

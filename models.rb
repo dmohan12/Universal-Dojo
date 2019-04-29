@@ -75,14 +75,34 @@ class Tag
   property :video_id, Integer
 end
 
+class Follow
+  include DataMapper::Resource
+  property :id, Serial
+  property :their_id, Integer
+  property :your_id, Integer
+  property :date, DateTime
+end
+
+
+class Request
+  include DataMapper::Resource
+  property :id, Serial
+  property :their_id, Integer
+  property :your_id, Integer
+  property :date, DateTime
+
+end
+
 # Perform basic sanity checks and initialize all relationships
 # Call this when you've defined all your models
 DataMapper.finalize
 
 # automatically create the post table
 User.auto_upgrade!
+Follow.auto_upgrade!
 Video.auto_upgrade!
 Like.auto_upgrade!
 Dislike.auto_upgrade!
 Comment.auto_upgrade!
 Tag.auto_upgrade!
+Request.auto_upgrade!

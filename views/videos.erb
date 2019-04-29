@@ -34,7 +34,13 @@
         
         <% @users.each do |u| %>
             <%if u.id == v.user_id%>
-                <h2> <a class="link" href="/users/<%=u.id%>/videos"> <%=u.email%></a></h2>
+                <h2> <a class="link" href="/users/<%=u.id%>/videos"> <%=u.email%></a>
+
+                 <form action="/user/<%=v.user_id%>/request" method="get" style="display: inline;">
+                    <input type="submit" value="Follow" name="follow" style="font-size:20px"/>  
+                 </form>    
+        
+                </h2> 
             <%end%>
         <%end%>
 
