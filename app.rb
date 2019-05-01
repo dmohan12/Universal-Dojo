@@ -189,6 +189,8 @@ get "/user/:id/follow" do	#follow someone
 		f = Follow.new
 		f.their_id = params["id"]
 		f.your_id = current_user.id
+		f.your_email = current_user.email	#emails are for display purposes
+		f.their_email = @u.email
 		f.save
 		flash[:success] = "You followed #{@u.email}"
 		redirect back
@@ -198,23 +200,23 @@ get "/user/:id/follow" do	#follow someone
 	end
 end
 
-get "/user/:id/request" do 	#isnt working idk why
+#f = Follow.all
+#f.destroy
+
+get "/user/:id/notifications" do
+	@users = User.all(id: current_user.id)
+	@fllw = Follow.all(your_id: params["id"])
+
+	
+	erb :notifications
+	
+
+end
+
+get "/user/:id/request_accept" do 	#isnt working
 	authenticate!
-	req = Request.first(their_id: params["id"], your_id: current_user.id)
+	fllw = Follow.all(their_id: params["id"])
 	@u = User.get(params["id"])
-
-	if req == nil
-		r = Request.new
-		r.their_id = params["id"]
-		r.your_id = current_user.id
-		r.save
-		flash[:success] = "You requested to follow #{@u.email}"
-		redirect back
-	else
-		flash[:error] = "You already requested to follow #{@u.email}"
-		redirect back
-	end
-
 
 end
 

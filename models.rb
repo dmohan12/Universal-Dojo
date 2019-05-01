@@ -78,6 +78,9 @@ end
 class Follow
   include DataMapper::Resource
   property :id, Serial
+  property :their_email, Text
+  property :your_email, Text
+  property :accepted, Boolean, :default => false
   property :their_id, Integer
   property :your_id, Integer
   property :date, DateTime
