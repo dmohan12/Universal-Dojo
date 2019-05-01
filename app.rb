@@ -1,8 +1,17 @@
 require "sinatra"
 require 'sinatra/flash'
-#require 'fog'
+require 'fog'
+require 'video_info'
 require_relative "authentication.rb"
 require_relative "models.rb"
+require 'rubygems'
+
+
+
+
+
+VideoInfo.provider_api_keys = { youtube: 'AIzaSyAnYcD4cc4Q69mfaj5on34oglsEylcIPmI', vimeo: 'e6dc9a7f6e15ae51ee4fcc50909210b6' }
+
 
 
 #connection = Fog::Storage.new({
@@ -18,7 +27,7 @@ require_relative "models.rb"
 
 # authenticate! will make sure that the user is signed in, if they are not they will be redirected to the login page
 # if the user is signed in, current_user will refer to the signed in user object.
-# if they are not signed in, current_user will be nil
+# if they are not signed in, current_user will be nil\
 
 get "/" do
 	erb :index
@@ -42,13 +51,14 @@ end
 get "/users/:id/delete" do	#delete users if you are admin
 	authenticate!
 	u = User.get(params["id"])
-	v = Video.get(user_id: params["id"])
-	c = Comment.get(user_id: params["id"])
+	v = Video.all(user_id: params["id"])
+	c = Comment.all(user_id: params["id"])
 
 	if current_user.role_id == 0
 		u.destroy
 		v.destroy
 		c.destroy
+		redirect "/users"
 	else
 		erb :noPermission
 	end
@@ -77,12 +87,16 @@ end
 post "/post/create" do      #grabs backend code in creating a new post
 	authenticate!
 	vid = Video.new
+
 	
 	if params["title"] && params["description"] && params["video_url"]
+		video = VideoInfo.new(params["video_url"])
+		
 		vid.title = params["title"]
 		vid.description = params["description"]
 		vid.video_url = params["video_url"]
 		vid.user_id = current_user.id
+		vid.thumbnail_image=video.thumbnail_medium
 		vid.save
 
 		#adding tags
@@ -155,7 +169,7 @@ end
 get "/post/like/:id" do   #like a video
 	authenticate!
 
-	lyke=Like.all(video_id: params["id"]) & Like.all(user_id: current_user.id)
+	lyke=Like.first(video_id: params["id"], user_id: current_user.id)
 	
 
 	if lyke != nil
@@ -163,6 +177,8 @@ get "/post/like/:id" do   #like a video
 	else 
 		l=Like.new
 		v=Video.get(params["id"])
+		v.like_counter+=1
+		v.save
 
 		l.user_id=current_user.id
 		l.video_id=params["id"]
