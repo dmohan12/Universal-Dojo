@@ -1,16 +1,24 @@
 require "sinatra"
 require 'sinatra/flash'
 require 'fog'
+require 'video_info'
 require_relative "authentication.rb"
 require_relative "models.rb"
+require 'rubygems'
 
 
-connection = Fog::Storage.new({
-	:provider                 => 'AWS',
-	:aws_access_key_id        => 'AKIAJLLPHO3SZWYNOMWA',
-	:aws_secret_access_key    => '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'
-	})
 
+
+
+VideoInfo.provider_api_keys = { youtube: 'AIzaSyAnYcD4cc4Q69mfaj5on34oglsEylcIPmI', vimeo: 'e6dc9a7f6e15ae51ee4fcc50909210b6' }
+
+
+
+#connection = Fog::Storage.new({
+#	:provider                 => 'AWS',
+#	:aws_access_key_id        => 'AKIAJLLPHO3SZWYNOMWA',
+#	:aws_secret_access_key    => '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'
+#	})
 
 #the following urls are included in authentication.rb
 # GET /login
@@ -19,7 +27,7 @@ connection = Fog::Storage.new({
 
 # authenticate! will make sure that the user is signed in, if they are not they will be redirected to the login page
 # if the user is signed in, current_user will refer to the signed in user object.
-# if they are not signed in, current_user will be nil
+# if they are not signed in, current_user will be nil\
 
 get "/" do
 	erb :index
@@ -80,12 +88,16 @@ end
 post "/post/create" do      #grabs backend code in creating a new post
 	authenticate!
 	vid = Video.new
+
 	
 	if params["title"] && params["description"] && params["video_url"]
+		video = VideoInfo.new(params["video_url"])
+		
 		vid.title = params["title"]
 		vid.description = params["description"]
 		vid.video_url = params["video_url"]
 		vid.user_id = current_user.id
+		vid.thumbnail_image=video.thumbnail_medium
 		vid.save
 
 		#adding tags
@@ -104,9 +116,6 @@ post "/post/create" do      #grabs backend code in creating a new post
 	
 end
 
-#post "/tags" do
-#	erb :tags
-#end
 
 get "/post/new" do       #erb to postVideo
 	authenticate!
