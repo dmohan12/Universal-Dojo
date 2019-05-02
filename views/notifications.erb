@@ -15,15 +15,15 @@
 
 <div class="container">
     <% @users.each do |u| %>
-       
-        <h4>Notifications for <%=u.email%></h4>
+
+        <h4>Notifications for <%=u.username%></h4>
         <%@fllw.each do |f|%>
            <form action="/user/<%=u.id%>/request_accept" method="get" style="display: inline;">
-            <%=f.their_id%> Requested to follow you. <input type="submit" value="Accept" name="request_accept" style="font-size:15px"/>  
-         </form> 
+            <%=f.their_id%> Requested to follow you. <input type="submit" value="Accept" name="request_accept" style="font-size:15px"/>
+         </form>
         <br>
         <%end%>
- 
+
 
     <% end %>
 

@@ -14,11 +14,11 @@ VideoInfo.provider_api_keys = { youtube: 'AIzaSyAnYcD4cc4Q69mfaj5on34oglsEylcIPm
 
 
 
-#connection = Fog::Storage.new({
-#	:provider                 => 'AWS',
-#	:aws_access_key_id        => 'AKIAJLLPHO3SZWYNOMWA',
-#	:aws_secret_access_key    => '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'
-#	})
+connection = Fog::Storage.new({
+	:provider                 => 'AWS',
+	:aws_access_key_id        => 'AKIAJLLPHO3SZWYNOMWA',
+	:aws_secret_access_key    => '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'
+	})
 
 #the following urls are included in authentication.rb
 # GET /login
@@ -89,38 +89,59 @@ post "/post/create" do      #grabs backend code in creating a new post
 	authenticate!
 	vid = Video.new
 
-	
+
 	if params["title"] && params["description"] && params["video_url"]
-		video = VideoInfo.new(params["video_url"])
-		
+
+		#video = VideoInfo.new(params["video_url"])
+
 		vid.title = params["title"]
 		vid.description = params["description"]
 		vid.video_url = params["video_url"]
 		vid.user_id = current_user.id
-		vid.thumbnail_image=video.thumbnail_medium
+		#vid.thumbnail_image=video.thumbnail_medium
 		vid.save
 
-		#adding tags
-		if params["tag_name"]
-			t = params["tag_name"].split(",")
-			t.each do |tags|
-				ta = Tag.new
-				ta.tag_name = tags
-				ta.video_id = vid.id
-				ta.save
-			end
-			
+	elsif params[:video] && params[:video][:tempfile] && params[:video][:filename] &&  params["title"] && params["description"]
+
+		file       = params[:video][:tempfile]
+		filename   = params[:video][:filename]
+		directory = connection.directories.create(
+			:key    => "fog-demo-#{Time.now.to_i}", # globally unique name
+			:public => true
+		)
+		file2 = directory.files.create(
+			:key    => filename,
+			:body   => file,
+			:public => true
+		)
+		url = file2.public_url
+		vid.video_url=url
+		vid.description = parmas["description"]
+		vid.title = params["title"]
+		vid.save
+
+	end
+
+	#adding tags
+	if params["tag_name"]
+		t = params["tag_name"].split(",")
+		t.each do |tags|
+			ta = Tag.new
+			ta.tag_name = tags
+			ta.video_id = vid.id
+			ta.save
 		end
 		redirect "/videos"
-	end 
-	
+	end
+
 end
+
 
 
 get "/post/new" do       #erb to postVideo
 	authenticate!
 	erb :postVideo
-end 
+end
 
 get "/post/:id/delete" do   #delete function
 	authenticate!
@@ -134,28 +155,29 @@ get "/post/:id/delete" do   #delete function
 				redirect "/videos"
 			else
 				erb :noPermission
-			end 
+			end
 			#redirect "/videos"
 		else
 			erb :videoDNE
-		end 
-end 
+		end
+end
 
 get "/post/:id/comment" do 	#adds comment
 	authenticate!
 	v = Video.get(params["id"])
-	if params["text"] 
+	if params["text"]
 		t = Comment.new
 		t.user_id = current_user.id
+		t.username = current_user.username
 		t.video_id = v.id
 		t.text = params["text"]
 		t.user_email = current_user.email
 		t.save
 
 	end
-	
+
 	redirect "/videos"
-	
+
 
 end
 
@@ -187,7 +209,7 @@ get "/post/like/:id" do   #like a video
 		redirect "/videos"
 	end
 
-end 
+end
 
 
 get "/user/:id/follow" do	#follow someone
@@ -216,9 +238,9 @@ get "/user/:id/notifications" do
 	@users = User.all(id: current_user.id)
 	@fllw = Follow.all(your_id: params["id"])
 
-	
+
 	erb :notifications
-	
+
 
 end
 
@@ -229,3 +251,6 @@ get "/user/:id/request_accept" do 	#isnt working
 
 end
 
+get "/post/:id/search" do
+
+end
