@@ -186,12 +186,18 @@ get "/post/:id/comment" do 	#adds comment
 
 end
 
-get "/post/:id/comment/delete" do	#will delete comment
+get "/post/:v_id/comment/:id/delete" do	#will delete comment
 	authenticate!
+	c = Comment.first(id: params["id"], video_id: params["v_id"])
+	if c != nil
+		c.destroy
+		flash[:success] = "You removed the comment"
 
+	else
+		flash[:error] = "Cannot delete comment"
+	end
 
-
-	redirect "/videos"
+	redirect back
 end
 
 get "/post/like/:id" do   #like a video

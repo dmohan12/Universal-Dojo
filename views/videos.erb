@@ -67,8 +67,11 @@
         <%@comments.each do |c|%>
             <div class="container">
                 <%if c.video_id == v.id%>
-                    <div class="comment_box"><%=c.user_email%> said: <%=c.text%></div>
-        
+                    <div class="comment_box"><%=c.user_email%> said: <%=c.text%>    
+                        <form action="/post/<%=v.id%>/comment/<%=c.id%>/delete" method="get" style="display: inline;">
+                            <input  type="submit" value="Delete" name="Delete_c"> 
+                        </form>
+                    </div>
                 <%end%>
             </div>
             <%#c.destroy%>
@@ -87,10 +90,10 @@
         <% #v.dislike_counter = 0%>
         
         <form action="/post/like/<%=v.id%>" method="get" style="display: inline;" >
-            <input type="submit" value="Like" name="Like"> Total Likes: <%= v.like_counter%>
+            <input type="submit" value="Like" name="Like"/> Total Likes: <%= v.like_counter%>
         </form>
         <form action="/post/dislike/<%=v.id%>" method="get" style="display: inline;"  >
-            <input type="submit" value="Disike" name="Dislike"> Total Dislikes: <%= v.dislike_counter%>
+            <input type="submit" value="Disike" name="Dislike"/> Total Dislikes: <%= v.dislike_counter%>
         </form>
         <br>
 
