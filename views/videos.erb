@@ -34,70 +34,137 @@
         
         <% @users.each do |u| %>
             <%if u.id == v.user_id%>
-                <h2> <a class="link" href="/users/<%=u.id%>/videos"> <%=u.email%></a>
+                
+                <%@follows.each do|f|%>
+                    
+                    <%if f.followed_id == v.user_id && f.accepted == true #shows videos of ppl you follow%>
+                        Following
+                        <h2> <a class="link" href="/users/<%=u.id%>/videos"> <%=u.email%></a> </h2> 
+                        <h3>Title: <%= v.title  %></h3> 
+                        <h4>Description: <%= v.description  %></h4>
+                        <a data-fancybox href="<%=v.video_url %>">
+                            <%=v.video_url%>
+                        </a>
+                        <br>
+                        <%=v.video_url%>
+                        <br>
+                        <strong> Tags: </strong>
+                        <%@tags.each do |t|%>
 
-                 <form action="/user/<%=v.user_id%>/follow" method="get" style="display: inline;">
-                    <input type="submit" value="Follow" name="follow" style="font-size:20px"/>  
-                 </form>    
-        
-                </h2> 
-            <%end%>
-        <%end%>
+                            <%if t.video_id == v.id%>
+                                 <%=t.tag_name%> 
+                            <%end%>
+                            <%#t.destroy%>
+                        <%end%>
+                        <br>
+                        <strong> Comments: </strong>
+                        <br>
+                        <%@comments.each do |c|%>
+                            <div class="container">
+                                <%if c.video_id == v.id%>
+                                    <div class="comment_box"><%=c.user_email%> said: <%=c.text%>    
+                                        <form action="/post/<%=v.id%>/comment/<%=c.id%>/delete" method="get" style="display: inline;">
+                                            <input  type="submit" value="Delete" name="Delete_c"> 
+                                        </form>
+                                    </div>
+                                <%end%>
+                            </div>
+                            <%#c.destroy%>
+                        <%end%>  
 
-
-        <h3>Title: <%= v.title  %></h3> 
-        <h4>Description: <%= v.description  %></h4>
-        <a data-fancybox href="<%=v.video_url %>">
-            <%=v.video_url%>
-        </a>
-        <br>
-        <%=v.video_url%>
-        <br>
-        <strong> Tags: </strong>
-        <%@tags.each do |t|%>
-
-            <%if t.video_id == v.id%>
-                 <%=t.tag_name%> 
-            <%end%>
-            <%#t.destroy%>
-        <%end%>
-        <br>
-        <strong> Comments: </strong>
-        <br>
-        <%@comments.each do |c|%>
-            <div class="container">
-                <%if c.video_id == v.id%>
-                    <div class="comment_box"><%=c.user_email%> said: <%=c.text%>    
-                        <form action="/post/<%=v.id%>/comment/<%=c.id%>/delete" method="get" style="display: inline;">
-                            <input  type="submit" value="Delete" name="Delete_c"> 
+                        <form action="/post/<%=v.id%>/comment" method="get" style="display: inline;">
+                            Enter comment: <input type="text" name="text"/>
+                            <input type="submit" value="Send" name="comment"/>  
                         </form>
-                    </div>
+                        <%if v.user_id == current_user.id || current_user.role_id == 0%>
+                            <form action="/post/<%=v.id%>/delete" method="get" style="display: inline;">
+                                <button  type="sumbit" class="button" name="id" > Delete </button>
+                            </form>
+                        <%end%>
+                        <% #v.like_counter = 0%>
+                        <% #v.dislike_counter = 0%>
+
+                        <br>
+
+                        <form action="/post/like/<%=v.id%>" method="get" style="display: inline;" >
+                            <input type="submit" value="Like" name="Like"/> Total Likes: <%= v.like_counter%>
+                        </form>
+                        <form action="/post/dislike/<%=v.id%>" method="get" style="display: inline;"  >
+                            <input type="submit" value="Disike" name="Dislike"/> Total Dislikes: <%= v.dislike_counter%>
+                        </form>
+                        <br>
+
+                        <%#v.destroy%>
+                    <%elsif f.followed_id == v.user_id && f.accepted == false%>
+                        <h5> Follow someone to view their videos</h5>
+                    <%end%> 
                 <%end%>
-            </div>
-            <%#c.destroy%>
-        <%end%>  
 
-        <form action="/post/<%=v.id%>/comment" method="get" style="display: inline;">
-            Enter comment: <input type="text" name="text"/>
-            <input type="submit" value="Send" name="comment"/>  
-        </form>
-        <%if v.user_id == current_user.id || current_user.role_id == 0%>
-            <form action="/post/<%=v.id%>/delete" method="get">
-                <button  type="sumbit" class="button" name="id" > Delete </button>
-            </form>
+                <%if current_user.id == v.user_id #shows your videos%>
+                    <br>
+
+                    <h2> <a class="link" href="/users/<%=u.id%>/videos"> <%=u.email%></a> </h2> 
+                        <h3>Title: <%= v.title  %></h3> 
+                        <h4>Description: <%= v.description  %></h4>
+                        <a data-fancybox href="<%=v.video_url %>">
+                            <%=v.video_url%>
+                        </a>
+                        <br>
+                        <%=v.video_url%>
+                        <br>
+                        <strong> Tags: </strong>
+                        <%@tags.each do |t|%>
+
+                            <%if t.video_id == v.id%>
+                                 <%=t.tag_name%> 
+                            <%end%>
+                            <%#t.destroy%>
+                        <%end%>
+                        <br>
+                        <strong> Comments: </strong>
+                        <br>
+                        <%@comments.each do |c|%>
+                            <div class="container">
+                                <%if c.video_id == v.id%>
+                                    <div class="comment_box"><%=c.user_email%> said: <%=c.text%>    
+                                        <form action="/post/<%=v.id%>/comment/<%=c.id%>/delete" method="get" style="display: inline;">
+                                            <input  type="submit" value="Delete" name="Delete_c"> 
+                                        </form>
+                                    </div>
+                                <%end%>
+                            </div>
+                            <%#c.destroy%>
+                        <%end%>  
+
+                        <form action="/post/<%=v.id%>/comment" method="get" style="display: inline;">
+                            Enter comment: <input type="text" name="text"/>
+                            <input type="submit" value="Send" name="comment"/>  
+                        </form>
+                        <%if v.user_id == current_user.id || current_user.role_id == 0%>
+                            <form action="/post/<%=v.id%>/delete" method="get" style="display: inline;">
+                                <button  type="sumbit" class="button" name="id" > Delete </button>
+                            </form>
+                        <%end%>
+                        <% #v.like_counter = 0%>
+                        <% #v.dislike_counter = 0%>
+
+                        <br>
+
+                        <form action="/post/like/<%=v.id%>" method="get" style="display: inline;" >
+                            <input type="submit" value="Like" name="Like"/> Total Likes: <%= v.like_counter%>
+                        </form>
+                        <form action="/post/dislike/<%=v.id%>" method="get" style="display: inline;"  >
+                            <input type="submit" value="Disike" name="Dislike"/> Total Dislikes: <%= v.dislike_counter%>
+                        </form>
+                        <br>
+
+                        <%#v.destroy%>
+                <%end%>
+            <%end%>
         <%end%>
-        <% #v.like_counter = 0%>
-        <% #v.dislike_counter = 0%>
-        
-        <form action="/post/like/<%=v.id%>" method="get" style="display: inline;" >
-            <input type="submit" value="Like" name="Like"/> Total Likes: <%= v.like_counter%>
-        </form>
-        <form action="/post/dislike/<%=v.id%>" method="get" style="display: inline;"  >
-            <input type="submit" value="Disike" name="Dislike"/> Total Dislikes: <%= v.dislike_counter%>
-        </form>
-        <br>
 
-        <%#v.destroy%>
+
+        
     <%end%>
     
     

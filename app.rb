@@ -88,6 +88,7 @@ get "/dashboard" do
 	@tags = Tag.all
 	@comments = Comment.all
 	@users = User.all
+	@follows = Follow.all(follower_id: current_user.id)
 	erb :dashboard
 	#erb :videos
 end
