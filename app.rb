@@ -208,7 +208,7 @@ get "/post/like/:id" do   #like a video
 		l = Like.new
 		v = Video.get(params["id"])
 		v.like_counter+=1
-		v.dislike_counter-=1
+		
 		v.save
 
 		l.user_id=current_user.id
@@ -216,6 +216,7 @@ get "/post/like/:id" do   #like a video
 		l.save
 		if dlyke != nil
 			dlyke.destroy
+			v.dislike_counter-=1
 		end
 		redirect back
 	end
@@ -233,7 +234,7 @@ get "/post/dislike/:id" do
 	else
 		dl = Dislike.new
 		v = Video.get(params["id"])
-		v.like_counter-=1
+		
 		v.dislike_counter+=1
 		v.save
 
@@ -241,6 +242,7 @@ get "/post/dislike/:id" do
 		dl.video_id = params["id"]
 		if lyke != nil
 			lyke.destroy
+			v.like_counter-=1
 		end
 		dl.save
 		redirect back

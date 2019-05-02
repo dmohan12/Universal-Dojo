@@ -5,6 +5,8 @@ gem 'sinatra-flash'
 gem 'google-api-client'
 gem 'fog'
 gem 'video_info'
+gem 'aws-sdk', '~> 3'
+gem 'wdm', '>= 0.1.0' if Gem.win_platform?
 
 group :development do
   gem "sqlite3-ruby"
