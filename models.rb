@@ -80,11 +80,11 @@ end
 class Follow
   include DataMapper::Resource
   property :id, Serial
-  property :their_email, Text
-  property :your_email, Text
+  property :followed_email, Text
+  property :follower_email, Text
   property :accepted, Boolean, :default => false
-  property :their_id, Integer
-  property :your_id, Integer
+  property :followed_id, Integer
+  property :follower_id, Integer
   property :date, DateTime
 end
 

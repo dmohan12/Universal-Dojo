@@ -42,7 +42,7 @@ end
 
 get "/users" do #shows all the users created
 	authenticate!
-	@users = User.all
+	@users2 = User.all
 	erb :users
 end
 
@@ -78,7 +78,7 @@ get "/videos" do
 	@tags = Tag.all
 	@comments = Comment.all
 	@users = User.all
-	@follows = Follow.all(your_id: current_user.id)
+	@follows = Follow.all(follower_id: current_user.id)
 	erb :videos
 end
 
@@ -158,7 +158,7 @@ get "/post/:id/delete" do   #delete function
 			if v.user_id==current_user.id || current_user.role_id == 0
 				v.destroy
 				c.destroy
-				redirect "/videos"
+				redirect back
 			else
 				erb :noPermission
 			end 
@@ -172,12 +172,12 @@ get "/post/:id/comment" do 	#adds comment
 	authenticate!
 	v = Video.get(params["id"])
 	if params["text"] 
-		t = Comment.new
-		t.user_id = current_user.id
-		t.video_id = v.id
-		t.text = params["text"]
-		t.user_email = current_user.email
-		t.save
+		c = Comment.new
+		c.user_id = current_user.id
+		c.video_id = v.id
+		c.text = params["text"]
+		c.user_email = current_user.email
+		c.save
 
 	end
 	
@@ -262,19 +262,26 @@ end
 
 get "/user/:id/follow" do	#follow someone
 	authenticate!
-	fllw = Follow.first(their_id: params["id"], your_id: current_user.id)
-	@u = User.get(params["id"])
-	if fllw == nil
-		f = Follow.new
-		f.their_id = params["id"]
-		f.your_id = current_user.id
-		f.your_email = current_user.email	#emails are for display purposes
-		f.their_email = @u.email
-		f.save
-		flash[:success] = "You followed #{@u.email}"
+	fllw = Follow.first(followed_id: params["id"], follower_id: current_user.id)
+	@user_f = User.get(params["id"])
+
+	if @user_f.id == current_user.id
+		flash[:error] = "#{current_user.id} can't follow yourself #{@user_f.id}" 
 		redirect back
+
+	elsif fllw == nil
+		f = Follow.new
+		f.followed_id = params["id"]
+		f.followed_email = @user_f.email
+		f.follower_id = current_user.id
+		f.follower_email = current_user.email	#emails are for display purposes
+		f.save
+
+		flash[:success] = "You followed #{@user_f.email}"
+		redirect back
+
 	else
-		flash[:error] = "Already following #{@u.email}"
+		flash[:error] = "Already following #{@user_f.email}"
 		redirect back
 	end
 end
@@ -283,7 +290,7 @@ end
 #f.destroy
 
 get "/user/:id/notifications" do
-	@users = User.all(id: current_user.id)
+	#@users = User.all(id: current_user.id)
 	@fllw = Follow.all(your_id: params["id"])
 
 	
@@ -295,7 +302,7 @@ end
 get "/user/:id/request_accept" do 	#isnt working
 	authenticate!
 	fllw = Follow.all(their_id: params["id"])
-	@u = User.get(params["id"])
+	#@users = User.get(params["id"])
 
 end
 

@@ -30,7 +30,9 @@
 <h1>
     <% @user.each do |u| %>
         <%=u.email%>'s Profile
-        
+        <form action="/user/<%=u.id%>/follow" method="get" style="display: inline;">
+            <input type="submit" value="Follow <%=u.id%>" name="follow" style="font-size:20px"/>  
+         </form>  
 
     <%end%>
 
