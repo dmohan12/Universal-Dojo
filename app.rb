@@ -223,6 +223,7 @@ get "/post/like/:id" do   #like a video
 		if dlyke != nil
 			dlyke.destroy
 			v.dislike_counter-=1
+			v.save
 		end
 		redirect back
 	end
@@ -249,6 +250,7 @@ get "/post/dislike/:id" do
 		if lyke != nil
 			lyke.destroy
 			v.like_counter-=1
+			v.save
 		end
 		dl.save
 		redirect back
