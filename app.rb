@@ -42,7 +42,7 @@ end
 
 get "/users" do #shows all the users created
 	authenticate!
-	@users2 = User.all
+	@users = User.all
 	erb :users
 end
 
@@ -266,7 +266,7 @@ get "/user/:id/follow" do	#follow someone
 	@user_f = User.get(params["id"])
 
 	if @user_f.id == current_user.id
-		flash[:error] = "#{current_user.id} can't follow yourself #{@user_f.id}" 
+		flash[:error] = "You can't follow yourself" 
 		redirect back
 
 	elsif fllw == nil
@@ -277,8 +277,11 @@ get "/user/:id/follow" do	#follow someone
 		f.follower_email = current_user.email	#emails are for display purposes
 		f.save
 
-		flash[:success] = "You followed #{@user_f.email}"
+		flash[:success] = "You requested to follow #{@user_f.email}"
 		redirect back
+
+	elsif fllw.accepted == false
+		flash[:success] = "You already requested to follow #{@user_f.email}"
 
 	else
 		flash[:error] = "Already following #{@user_f.email}"
@@ -290,19 +293,37 @@ end
 #f.destroy
 
 get "/user/:id/notifications" do
-	#@users = User.all(id: current_user.id)
-	@fllw = Follow.all(your_id: params["id"])
+	authenticate!
+	
+	@fl = Follow.all(followed_id: params["id"])
 
 	
 	erb :notifications
-	
-
 end
 
-get "/user/:id/request_accept" do 	#isnt working
+get "/user/request_accept/:f_id" do 	#isnt working
 	authenticate!
-	fllw = Follow.all(their_id: params["id"])
+	fllw = Follow.get(params["f_id"])
+	if fllw
+		fllw.accepted = true
+		fllw.save
+		flash[:success] = "Follow request accepted"
+		redirect back
+	end
 	#@users = User.get(params["id"])
 
 end
+
+get "/user/request_reject/:f_id" do 	
+	authenticate!
+	fllw = Follow.get(params["f_id"])
+	if fllw 
+		fllw.destroy
+		flash[:success] = "Follow request rejected"
+		redirect back
+	end
+	#@users = User.get(params["id"])
+
+end
+
 

@@ -14,17 +14,24 @@
 </head>
 
 <div class="container">
-    <% @users.each do |u| %>
+
        
-        <h4>Notifications for <%=u.email%></h4>
-        <%@fllw.each do |f|%>
-           <form action="/user/<%=u.id%>/request_accept" method="get" style="display: inline;">
-            <%=f.their_id%> Requested to follow you. <input type="submit" value="Accept" name="request_accept" style="font-size:15px"/>  
-         </form> 
-        <br>
+    <h4>Notifications for <%=current_user.email%></h4>
+    <%@fl.each do |f|%>
+        <%if f.accepted == false%>
+            <form action="/user/request_accept/<%=f.id%>" method="get" style="display: inline;">
+                <%=f.follower_email%> Requested to follow you. <input type="submit" value="Accept" name="request_accept" style="font-size:15px"/>  
+            </form> 
+            <form action="/user/request_reject/<%=f.id%>" method="get" style="display: inline;">
+                <input type="submit" value="Reject" name="request_reject" style="font-size:15px"/>  
+            </form> 
+            <br>
+        <%else%>
+            <h5> Accepted <%=f.follower_email%> </h5>
         <%end%>
+    <%end%>
  
 
-    <% end %>
+
 
 </div>
