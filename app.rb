@@ -258,10 +258,7 @@ get "/post/dislike/:id" do
 
 end
 
-l = Like.all
-d = Dislike.all
-l.destroy
-d.destroy
+
 
 get "/user/:id/follow" do	#follow someone
 	authenticate!
