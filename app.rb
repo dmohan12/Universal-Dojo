@@ -282,7 +282,7 @@ get "/user/:id/follow" do	#follow someone
 
 	elsif fllw.accepted == false
 		flash[:success] = "You already requested to follow #{@user_f.email}"
-
+		redirect back
 	else
 		flash[:error] = "Already following #{@user_f.email}"
 		redirect back
