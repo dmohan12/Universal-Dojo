@@ -1,6 +1,7 @@
 require "sinatra"
 require 'sinatra/flash'
 require 'fog'
+require "aws-sdk"
 require 'video_info'
 require_relative "authentication.rb"
 require_relative "models.rb"
@@ -13,12 +14,18 @@ require 'rubygems'
 VideoInfo.provider_api_keys = { youtube: 'AIzaSyAnYcD4cc4Q69mfaj5on34oglsEylcIPmI', vimeo: 'e6dc9a7f6e15ae51ee4fcc50909210b6' }
 
 
+connection = Fog::Storage.new({
+	:provider                 => 'AWS',
+	:aws_access_key_id        => 'AKIAIONX34ZGTIXL5J4A',
+	:aws_secret_access_key    => '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'
+	})
 
-#connection = Fog::Storage.new({
-#	:provider                 => 'AWS',
-#	:aws_access_key_id        => 'AKIAJLLPHO3SZWYNOMWA',
-#	:aws_secret_access_key    => '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'
-#	})
+
+if ENV['DATABASE_URL']
+	S3_BUCKET = "instagram"
+else
+	S3_BUCKET = "instagram-dev"
+end
 
 #the following urls are included in authentication.rb
 # GET /login
@@ -90,26 +97,46 @@ post "/post/create" do      #grabs backend code in creating a new post
 	vid = Video.new
 
 	
-	if params["title"] && params["description"] && params["video_url"]
-		video = VideoInfo.new(params["video_url"])
+	if params["title"] && params["description"] && params["video_url"]  
+
+		#video = VideoInfo.new(params["video_url"])
 		
 		vid.title = params["title"]
 		vid.description = params["description"]
 		vid.video_url = params["video_url"]
 		vid.user_id = current_user.id
-		vid.thumbnail_image=video.thumbnail_medium
+		#vid.thumbnail_image=video.thumbnail_medium
 		vid.save
-
-		#adding tags
-		if params["tag_name"]
-			t = params["tag_name"].split(",")
-			t.each do |tags|
-				ta = Tag.new
-				ta.tag_name = tags
-				ta.video_id = vid.id
-				ta.save
-			end
 			
+	elsif params[:video] && params[:video][:tempfile] && params[:video][:filename] &&  params["title"] && params["description"]
+
+		file       = params[:video][:tempfile]
+		filename   = params[:video][:filename]
+		directory = connection.directories.create(
+			:key    => "fog-demo-#{Time.now.to_i}", # globally unique name
+			:public => true
+		)
+		file2 = directory.files.create(
+			:key    => filename,
+			:body   => file,
+			:public => true
+		)
+		url = file2.public_url
+		vid.video_url=url
+		vid.description = parmas["description"]
+		vid.title = params["title"]
+		vid.save
+			
+	end
+
+	#adding tags
+	if params["tag_name"]
+		t = params["tag_name"].split(",")
+		t.each do |tags|
+			ta = Tag.new
+			ta.tag_name = tags
+			ta.video_id = vid.id
+			ta.save
 		end
 		redirect "/videos"
 	end 
@@ -125,12 +152,12 @@ end
 get "/post/:id/delete" do   #delete function
 	authenticate!
 		v=Video.get(params["id"])
-		#c=Comment.get(video_id: params["id"])
+		c=Comment.all(video_id: params["id"])
 
 		if v
 			if v.user_id==current_user.id || current_user.role_id == 0
 				v.destroy
-				#c.destroy
+				c.destroy
 				redirect "/videos"
 			else
 				erb :noPermission
@@ -154,7 +181,7 @@ get "/post/:id/comment" do 	#adds comment
 
 	end
 	
-	redirect "/videos"
+	redirect back
 	
 
 end
@@ -171,24 +198,60 @@ get "/post/like/:id" do   #like a video
 	authenticate!
 
 	lyke = Like.first(video_id: params["id"], user_id: current_user.id)
+	dlyke = Dislike.first(video_id: params["id"], user_id: current_user.id)
+
 	if lyke != nil
 		flash[:error] = "You already liked this post"
-		redirect "/videos"
+		redirect back
 
 	else
 		l = Like.new
 		v = Video.get(params["id"])
 		v.like_counter+=1
+		v.dislike_counter-=1
 		v.save
 
 		l.user_id=current_user.id
 		l.video_id = params["id"]
 		l.save
-		redirect "/videos"
+		if dlyke != nil
+			dlyke.destroy
+		end
+		redirect back
 	end
 
 end 
 
+get "/post/dislike/:id" do
+	authenticate!
+	dlyke = Dislike.first(video_id: params["id"], user_id: current_user.id)
+	lyke = Like.first(video_id: params["id"], user_id: current_user.id)
+	if dlyke != nil
+		flash[:error] = "You already disliked this post"
+		redirect back
+
+	else
+		dl = Dislike.new
+		v = Video.get(params["id"])
+		v.like_counter-=1
+		v.dislike_counter+=1
+		v.save
+
+		dl.user_id=current_user.id
+		dl.video_id = params["id"]
+		if lyke != nil
+			lyke.destroy
+		end
+		dl.save
+		redirect back
+	end
+
+end
+
+l = Like.all
+d = Dislike.all
+l.destroy
+d.destroy
 
 get "/user/:id/follow" do	#follow someone
 	authenticate!

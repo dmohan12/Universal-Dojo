@@ -40,6 +40,7 @@ class Video
   property :user_id, Integer
   property :date, DateTime
   property :like_counter, Integer, default: 0
+  property :dislike_counter, Integer, default: 0
   property :thumbnail_image, Text
 end
 
