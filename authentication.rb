@@ -37,10 +37,13 @@ end
 post "/register" do
 	email = params[:email]
 	password = params[:password]
+	username = params[:username]
+
 
 	u = User.new
 	u.email = email.downcase
 	u.password =  password
+	u.username = username
 	u.save
 
 	session[:user_id] = u.id
@@ -66,4 +69,3 @@ def authenticate!
 		redirect "/login"
 	end
 end
-

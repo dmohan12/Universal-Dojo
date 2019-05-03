@@ -13,10 +13,11 @@ class User
     include DataMapper::Resource
     property :id, Serial
     property :email, Text
+    property :username, Text
     property :password, Text
     property :profile_image_url, Text
     property :created_at, DateTime
-    property :role_id, Integer, default: 1
+    property :role_id, Integer, default: 0
 
     def administrator?
       return role_id == 0
@@ -54,6 +55,7 @@ end
 class Dislike
   include DataMapper::Resource
   property :id, Serial
+  property :username, Text
   property :user_id, Integer
   property :video_id, Integer
 
@@ -62,6 +64,7 @@ end
 class Comment
   include DataMapper::Resource
   property :id, Serial
+  property :username, Text
   property :user_id, Integer
   property :user_email, Text
   property :video_id, Integer
@@ -94,6 +97,8 @@ class Request
   property :id, Serial
   property :their_id, Integer
   property :your_id, Integer
+  property :their_username, Text
+  property :your_username, Text
   property :date, DateTime
 
 end

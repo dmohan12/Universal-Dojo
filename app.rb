@@ -140,15 +140,16 @@ post "/post/create" do      #grabs backend code in creating a new post
 			ta.save
 		end
 		redirect "/videos"
-	end 
-	
+	end
+
 end
+
 
 
 get "/post/new" do       #erb to postVideo
 	authenticate!
 	erb :postVideo
-end 
+end
 
 get "/post/:id/delete" do   #delete function
 	authenticate!
@@ -162,12 +163,12 @@ get "/post/:id/delete" do   #delete function
 				redirect back
 			else
 				erb :noPermission
-			end 
+			end
 			#redirect "/videos"
 		else
 			erb :videoDNE
-		end 
-end 
+		end
+end
 
 get "/post/:id/comment" do 	#adds comment
 	authenticate!
@@ -229,7 +230,7 @@ get "/post/like/:id" do   #like a video
 		redirect back
 	end
 
-end 
+end
 
 get "/post/dislike/:id" do
 	authenticate!
@@ -298,11 +299,11 @@ get "/user/:id/notifications" do
 	
 	@fl = Follow.all(followed_id: params["id"])
 
-	
+
 	erb :notifications
 end
 
-get "/user/request_accept/:f_id" do 	#isnt working
+get "/user/request_accept/:f_id" do 	#accepts the request
 	authenticate!
 	fllw = Follow.get(params["f_id"])
 	if fllw
@@ -327,4 +328,6 @@ get "/user/request_reject/:f_id" do
 
 end
 
+get "/post/:id/search" do
 
+end
