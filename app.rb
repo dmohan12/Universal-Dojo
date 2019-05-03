@@ -85,20 +85,37 @@ get "/dashboard" do
 end
 
 post "/post/create" do      #grabs backend code in creating a new post
+	
 	authenticate!
 	vid = Video.new
 
-	
-	if params["title"] && params["description"] && params["video_url"]
-		video = VideoInfo.new(params["video_url"])
-		
-		vid.title = params["title"]
-		vid.description = params["description"]
-		vid.video_url = params["video_url"]
-		vid.user_id = current_user.id
-		vid.thumbnail_image=video.thumbnail_medium
-		vid.save
+		# create a connection
+connection = Fog::Storage.new({
+	:provider                 => 'AWS',
+	:aws_access_key_id        =>'AKIAJGOZPYPJ7CN7OUAQ',
+	:aws_secret_access_key    => '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'
+  })
 
+
+     file = params[:video][:tempfile]
+	#filename = params[:][:filename]
+  
+  directory = connection.directories.new(:key => 'universal-dojo')
+filename = "C:/Users/NorwalkInn/Downloads/aws-s3-upload-vid.mp4"
+#bucket.files.create(key: "dir/aws-s3-upload-vid.mp4", body: File.open(file_name), public: true)
+
+file2 = directory.files.create(
+	:key    => File.basename(file),                #this is the FILE NAME uploaded to s3, still need to get filename from button 
+	:body   => file,   # this is the actual file being uploaded
+	:public => true
+  )
+
+
+		url=file2.public_url
+		vid.video_url=url
+		vid.user_id=current_user.id
+		vid.save
+		
 		#adding tags
 		if params["tag_name"]
 			t = params["tag_name"].split(",")
@@ -108,13 +125,10 @@ post "/post/create" do      #grabs backend code in creating a new post
 				ta.video_id = vid.id
 				ta.save
 			end
-			
 		end
-		redirect "/videos"
-	end 
-	
+		
+	redirect "/dashboard"
 end
-
 
 get "/post/new" do       #erb to postVideo
 	authenticate!
@@ -130,11 +144,11 @@ get "/post/:id/delete" do   #delete function
 			if v.user_id==current_user.id || current_user.role_id == 0
 				v.destroy
 				#c.destroy
-				redirect "/videos"
+				redirect "/dashboard"
 			else
 				erb :noPermission
 			end 
-			#redirect "/videos"
+			redirect "/videos"
 		else
 			erb :videoDNE
 		end 

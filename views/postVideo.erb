@@ -18,7 +18,7 @@ h3{
 }
 </style>
 
-<form action="/post/create" method="post">
+<form action="/post/create" method="post" enctype="multipart/form-data">
     
         <legend>Video information:</legend>
         <div class="box"> 
@@ -33,7 +33,7 @@ h3{
         <h3>OR</h3>
 
         <div class="box">
-            <input type="file" id="myFile" class="fileInput"><br>
+            <input type="file"  name="video" id="myFile" class="fileInput"><br>
             <h3>Tags</h3>
             <input type="text" name="tag_name"><br>
             <input type="submit" style= "margin: 5px;"value="Submit"><br>
