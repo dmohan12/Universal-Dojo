@@ -1,12 +1,10 @@
 require "sinatra"
 require 'sinatra/flash'
-require 'fog'
+require 'fog-aws'
 require 'video_info'
 require_relative "authentication.rb"
 require_relative "models.rb"
 require 'rubygems'
-
-
 
 
 
@@ -89,33 +87,45 @@ post "/post/create" do      #grabs backend code in creating a new post
 	authenticate!
 	vid = Video.new
 
-		# create a connection
-connection = Fog::Storage.new({
-	:provider                 => 'AWS',
-	:aws_access_key_id        =>'AKIAJGOZPYPJ7CN7OUAQ',
-	:aws_secret_access_key    => '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'
-  })
+	if params["title"] && params["description"] && params["video_url"] && !params[:video]  #if user uploads from youtube
 
-
-     file = params[:video][:tempfile]
-	#filename = params[:][:filename]
-  
-  directory = connection.directories.new(:key => 'universal-dojo')
-filename = "C:/Users/NorwalkInn/Downloads/aws-s3-upload-vid.mp4"
-#bucket.files.create(key: "dir/aws-s3-upload-vid.mp4", body: File.open(file_name), public: true)
-
-file2 = directory.files.create(
-	:key    => File.basename(file),                #this is the FILE NAME uploaded to s3, still need to get filename from button 
-	:body   => file,   # this is the actual file being uploaded
-	:public => true
-  )
-
-
-		url=file2.public_url
-		vid.video_url=url
-		vid.user_id=current_user.id
-		vid.save
+		video = VideoInfo.new(params["video_url"])
 		
+		vid.title = params["title"]
+		vid.description = params["description"]
+		vid.video_url = params["video_url"]
+		vid.user_id = current_user.id
+		vid.thumbnail_image=video.thumbnail_medium
+		vid.save
+	end 
+
+	if params[:video] && params[:video][:tempfile] && params[:video][:filename] &&  params["title"] && params["description"]  #if user uploads own video
+
+				# create a connection
+		connection = Fog::Storage.new({
+			:provider                 => 'AWS',
+			:aws_access_key_id        =>'AKIAJGOZPYPJ7CN7OUAQ',
+			:aws_secret_access_key    => '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'
+		})
+
+    	#file = params[:video][:filename]
+		file       = params[:video][:tempfile]
+		filename   = params[:video][:filename]
+	
+		bucket = connection.directories.new(:key => 'universal-dojo')
+		
+		file2 = bucket.files.create(
+			:key    => filename,                #this is the FILE NAME uploaded to s3, still need to get filename from button 
+			:body   => file,   # this is the actual file being uploaded
+			:public => true
+		)
+			url=file2.public_url
+			vid.video_url=url
+			vid.title=params["title"]
+			vid.description=params["description"]
+			vid.user_id=current_user.id
+			vid.save
+	end 
 		#adding tags
 		if params["tag_name"]
 			t = params["tag_name"].split(",")
