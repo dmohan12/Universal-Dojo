@@ -18,6 +18,7 @@
   color: black;
   margin: 5px;
   padding: 5px;
+  border-radius: 10px;
 }
 
 </style>
@@ -47,7 +48,6 @@
                             <%=v.video_url%>
                         </a>
                         <br>
-                        <%=v.video_url%>
                         <br>
                         <strong> Tags: </strong>
                         <%@tags.each do |t|%>
@@ -108,10 +108,10 @@
                         <h3>Title: <%= v.title  %></h3> 
                         <h4>Description: <%= v.description  %></h4>
                         <a data-fancybox href="<%=v.video_url %>">
-                            <%=v.video_url%>
+                            <%=v.title%>
                         </a>
                         <br>
-                        <%=v.video_url%>
+
                         <br>
                         <strong> Tags: </strong>
                         <%@tags.each do |t|%>

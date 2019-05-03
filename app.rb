@@ -1,7 +1,6 @@
 require "sinatra"
 require 'sinatra/flash'
 require 'fog'
-require "aws-sdk"
 require 'video_info'
 require_relative "authentication.rb"
 require_relative "models.rb"
@@ -100,13 +99,13 @@ post "/post/create" do      #grabs backend code in creating a new post
 	
 	if params["title"] && params["description"] && params["video_url"]  
 
-		#video = VideoInfo.new(params["video_url"])
+		video = VideoInfo.new(params["video_url"])
 		
 		vid.title = params["title"]
 		vid.description = params["description"]
 		vid.video_url = params["video_url"]
 		vid.user_id = current_user.id
-		#vid.thumbnail_image=video.thumbnail_medium
+		vid.thumbnail_image=video.thumbnail_medium
 		vid.save
 			
 	elsif params[:video] && params[:video][:tempfile] && params[:video][:filename] &&  params["title"] && params["description"]

@@ -48,7 +48,8 @@ post "/register" do
 
 	session[:user_id] = u.id
 
-	erb :"authentication/successful_signup"
+	flash[:success] = "Successfully signed up"
+	redirect "/"
 
 end
 
