@@ -15,10 +15,11 @@
 <h4>All existing users: </h4>
 <div class="container">
     <% @users.each do |u| %>
-        Email: <a class="link" href="/users/<%=u.id%>/videos"> <%=u.email%> </a> <form action = "/users/<%=u.id%>/delete" method="get" style="display: inline;"> <input type="submit" value="Delete"/> </form>
-        <form action="/user/<%=u.id%>/follow" method="get" style="display: inline;">
+        Email: <a class="link" href="/users/<%=u.id%>/videos"> <%=u.email%> </a> 
+        <form action = "/users/<%=u.id%>/delete" method="get" style="display: inline;"> <input type="submit" value="Delete"/> </form>
+            <form action="/user/<%=u.id%>/follow" method="get" style="display: inline;">
             <input type="submit" value="Follow" name="follow" style="font-size:15px"/>  
-         </form> 
+        </form> 
         <br>
     <% end %>
 </div>

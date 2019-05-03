@@ -12,6 +12,20 @@
     }
   }
 
+@keyframes pulse {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+  .element {
+    background: linear-gradient(180deg, #e7e7e7, #757474);
+    background-size: 100% 100%;
+
+    
+  }
+  
+  
   .bounceAnimation {
     animation: bounceIn 2s;
   }
