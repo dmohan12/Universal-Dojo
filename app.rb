@@ -1,12 +1,10 @@
 require "sinatra"
 require 'sinatra/flash'
-require 'fog'
+require 'fog-aws'
 require 'video_info'
 require_relative "authentication.rb"
 require_relative "models.rb"
 require 'rubygems'
-
-
 
 
 
@@ -93,6 +91,7 @@ get "/dashboard" do
 end
 
 post "/post/create" do      #grabs backend code in creating a new post
+	
 	authenticate!
 	vid = Video.new
 
@@ -107,43 +106,48 @@ post "/post/create" do      #grabs backend code in creating a new post
 		vid.user_id = current_user.id
 		vid.thumbnail_image=video.thumbnail_medium
 		vid.save
-			
-	elsif params[:video] && params[:video][:tempfile] && params[:video][:filename] &&  params["title"] && params["description"]
+	end 
 
+	if params[:video] && params[:video][:tempfile] && params[:video][:filename] &&  params["title"] && params["description"]  #if user uploads own video
+
+				# create a connection
+		connection = Fog::Storage.new({
+			:provider                 => 'AWS',
+			:aws_access_key_id        =>'AKIAJGOZPYPJ7CN7OUAQ',
+			:aws_secret_access_key    => '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'
+		})
+
+    	#file = params[:video][:filename]
 		file       = params[:video][:tempfile]
 		filename   = params[:video][:filename]
-		directory = connection.directories.create(
-			:key    => "fog-demo-#{Time.now.to_i}", # globally unique name
+	
+		bucket = connection.directories.new(:key => 'universal-dojo')
+		
+		file2 = bucket.files.create(
+			:key    => filename,	#this is the FILE NAME uploaded to s3, still need to get filename from button 
+			:body   => file,		# this is the actual file being uploaded
 			:public => true
 		)
-		file2 = directory.files.create(
-			:key    => filename,
-			:body   => file,
-			:public => true
-		)
-		url = file2.public_url
-		vid.video_url=url
-		vid.description = parmas["description"]
-		vid.title = params["title"]
-		vid.save
-			
-	end
-
-	#adding tags
-	if params["tag_name"]
-		t = params["tag_name"].split(",")
-		t.each do |tags|
-			ta = Tag.new
-			ta.tag_name = tags
-			ta.video_id = vid.id
-			ta.save
+			url=file2.public_url
+			vid.video_url=url
+			vid.title=params["title"]
+			vid.description=params["description"]
+			vid.user_id=current_user.id
+			vid.save
+	end 
+		#adding tags
+		if params["tag_name"]
+			t = params["tag_name"].split(",")
+			t.each do |tags|
+				ta = Tag.new
+				ta.tag_name = tags
+				ta.video_id = vid.id
+				ta.save
+			end
 		end
-		redirect "/videos"
-	end
-
+		
+	redirect "/dashboard"
 end
-
-
 
 get "/post/new" do       #erb to postVideo
 	authenticate!
