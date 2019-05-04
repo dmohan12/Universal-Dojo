@@ -1,31 +1,33 @@
 @keyframes bounceIn {
-    0% {
-      transform: scale(0.1);
-      opacity: 0;
-    }
-    60% {
-      transform: scale(1,1);
-      opacity: 1;
-    }
-    100% {
-      transform: scale(1);
-    }
+  0% {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes pulse {
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-  .element {
-    background: linear-gradient(180deg, #e7e7e7, #757474);
-    background-size: 100% 100%;
+.element {
+  background: linear-gradient(to right, rgb(109, 122, 194), rgb(109, 194, 194));
+}
 
-    
-  }
-  
-  
-  .bounceAnimation {
-    animation: bounceIn 2s;
-  }
+.bounceAnimation {
+  animation: bounceIn 2s;
+}
