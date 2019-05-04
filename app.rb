@@ -11,19 +11,6 @@ require 'rubygems'
 VideoInfo.provider_api_keys = { youtube: 'AIzaSyAnYcD4cc4Q69mfaj5on34oglsEylcIPmI', vimeo: 'e6dc9a7f6e15ae51ee4fcc50909210b6' }
 
 
-connection = Fog::Storage.new({
-	:provider                 => 'AWS',
-	:aws_access_key_id        => 'AKIAIONX34ZGTIXL5J4A',
-	:aws_secret_access_key    => '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'
-	})
-
-
-if ENV['DATABASE_URL']
-	S3_BUCKET = "instagram"
-else
-	S3_BUCKET = "instagram-dev"
-end
-
 #the following urls are included in authentication.rb
 # GET /login
 # GET /logout
