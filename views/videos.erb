@@ -18,15 +18,14 @@
                         <article class="videos_style">
                             <header class="header-user-video">
                                 <div>
-                                    <h2 class="h2-uname"> <a class="link" href="/users/<%=u.id%>/videos"> <%=u.email%> </a></h2> 
+                                   <h2 class="h2-uname" > <a data-fancybox href="<%=v.video_url %>">
+                                        <img src ="<%=v.thumbnail_image%>"><br>
+                                        <%=v.title%>
+                                    </a>
+                                    </h2>
+                                    <p><a class="link h2-uname" href="/users/<%=u.id%>/videos"> <%=u.email%> </a> </p>
                                 </div>
-                            </header>
-                            <a data-fancybox href="<%=v.video_url %>">
-                                <%=v.video_url%>
-                            </a>
-                            <h3>Title: <%= v.title  %></h3> 
-                            <p>Description: <%= v.description  %></p>
-
+                            </header>                
                             <strong> Tags: </strong>
                             <%@tags.each do |t|%>
 
@@ -36,25 +35,6 @@
                                 <%#t.destroy%>
                             <%end%>
                             <br>
-                            <strong> Comments: </strong>
-                            <br>
-                            <%@comments.each do |c|%>
-                            <div class="container">
-                                <%if c.video_id == v.id%>
-                                    <div class="comment_box"><%=c.user_email%> said: <%=c.text%>    
-                                        <form action="/post/<%=v.id%>/comment/<%=c.id%>/delete" method="get" style="display: inline;">
-                                            <input  type="submit" value="Delete" name="Delete_c"> 
-                                        </form>
-                                    </div>
-                                <%end%>
-                            </div>
-                            <%#c.destroy%>
-                            <%end%>  
-
-                            <form action="/post/<%=v.id%>/comment" method="get" style="display: inline;">
-                            Enter comment: <input type="text" name="text"/>
-                            <input type="submit" value="Send" name="comment"/>  
-                            </form>
                             <%if v.user_id == current_user.id || current_user.role_id == 0%>
                             <form action="/post/<%=v.id%>/delete" method="get" style="display: inline;">
                                 <button  type="sumbit" class="button" name="id" > Delete </button>
@@ -103,25 +83,22 @@
                             <%#t.destroy%>
                         <%end%>
                         <br>
-                        <strong> Comments: </strong>
-                        <br>
-                        <%@comments.each do |c|%>
-                            <div class="container">
-                                <%if c.video_id == v.id%>
-                                    <div class="comment_box"><%=c.user_email%> said: <%=c.text%>    
-                                        <form action="/post/<%=v.id%>/comment/<%=c.id%>/delete" method="get" style="display: inline;">
-                                            <input  type="submit" value="Delete" name="Delete_c"> 
-                                        </form>
-                                    </div>
-                                <%end%>
+                        <P> Comments </P>
+                            <div class="comment_box">
+                                <%@comments.each do |c|%>
+                                <div class="container">
+                                    <%if c.video_id == v.id%>
+                                        <strong> <%=c.user_email%> </strong> <%=c.text%>  
+                                    <%end%>  
+                                </div>
+                                <%#c.destroy%>
+                                <%end%>  
                             </div>
-                            <%#c.destroy%>
-                        <%end%>  
 
-                        <form action="/post/<%=v.id%>/comment" method="get" style="display: inline;">
-                            Enter comment: <input type="text" name="text"/>
-                            <input type="submit" value="Send" name="comment"/>  
-                        </form>
+                            <form action="/post/<%=v.id%>/comment" method="get" style="display: inline;">
+                                <input type="text" class="enter-comment" placeholder="Say something" name="text"/>
+                                <input type="submit" class="comment-send-button" value="Send" name="comment"/>  
+                            </form>
                         <%if v.user_id == current_user.id || current_user.role_id == 0%>
                             <form action="/post/<%=v.id%>/delete" method="get" style="display: inline;">
                                 <button  type="sumbit" class="button" name="id" > Delete </button>

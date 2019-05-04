@@ -91,7 +91,7 @@ post "/post/create" do      #grabs backend code in creating a new post
 		vid.description = params["description"]
 		vid.video_url = params["video_url"]
 		vid.user_id = current_user.id
-		vid.thumbnail_image=video.thumbnail_medium
+		vid.thumbnail_image=video.thumbnail_small
 		vid.save
 	end 
 
@@ -133,7 +133,7 @@ post "/post/create" do      #grabs backend code in creating a new post
 			end
 		end
 		
-	redirect "/dashboard"
+	redirect "/videos"
 end
 
 get "/post/new" do       #erb to postVideo
