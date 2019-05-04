@@ -13,10 +13,11 @@ class User
     include DataMapper::Resource
     property :id, Serial
     property :email, Text
+    property :username, Text
     property :password, Text
     property :profile_image_url, Text
     property :created_at, DateTime
-    property :role_id, Integer, default: 1
+    property :role_id, Integer, default: 0
 
     def administrator?
       return role_id == 0
@@ -40,6 +41,7 @@ class Video
   property :user_id, Integer
   property :date, DateTime
   property :like_counter, Integer, default: 0
+  property :dislike_counter, Integer, default: 0
   property :thumbnail_image, Text
 end
 
@@ -53,6 +55,7 @@ end
 class Dislike
   include DataMapper::Resource
   property :id, Serial
+  property :username, Text
   property :user_id, Integer
   property :video_id, Integer
 
@@ -61,6 +64,7 @@ end
 class Comment
   include DataMapper::Resource
   property :id, Serial
+  property :username, Text
   property :user_id, Integer
   property :user_email, Text
   property :video_id, Integer
@@ -76,14 +80,39 @@ class Tag
   property :video_id, Integer
 end
 
+class Follow
+  include DataMapper::Resource
+  property :id, Serial
+  property :followed_email, Text
+  property :follower_email, Text
+  property :accepted, Boolean, :default => false
+  property :followed_id, Integer
+  property :follower_id, Integer
+  property :date, DateTime
+end
+
+
+class Request
+  include DataMapper::Resource
+  property :id, Serial
+  property :their_id, Integer
+  property :your_id, Integer
+  property :their_username, Text
+  property :your_username, Text
+  property :date, DateTime
+
+end
+
 # Perform basic sanity checks and initialize all relationships
 # Call this when you've defined all your models
 DataMapper.finalize
 
 # automatically create the post table
 User.auto_upgrade!
+Follow.auto_upgrade!
 Video.auto_upgrade!
 Like.auto_upgrade!
 Dislike.auto_upgrade!
 Comment.auto_upgrade!
 Tag.auto_upgrade!
+Request.auto_upgrade!

@@ -1,67 +1,48 @@
 
 <head>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="<%= url('/main.css') %>" >
+    <link rel="stylesheet" type="text/css" href="<%= url('/upload_style.css') %>" >
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
 
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> 
-
-<style>
-body {
-text-align:center;
-}
-.fileInput{
-    margin-left: 90px;
-    padding-bottom:10px;
-}
-h3{
-    padding:10px;
-}
-
-.box {
-    position: relative;
-    background-color: silver;
-    color: black;
-    padding: 20px;
-}
-
-</style>
-
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> 
 </head>
 
+  
+<body>
+    <form action="/post/create" class="form1" method="post">
+            <div class="main bounceAnimation">
+                <p class="sign">Youtube Upload</p>
+             
+                <input class="un " type="text" name="title" placeholder="Title"/>               
+                <input class="un " type="text" name="description" placeholder="Description"/>
+                <input class="un " type="text" name="video_url" placeholder="Video URL"/>                
+                <h3 class="sign">Tags</h3>
+                <input class="un"  type="text" name="tag_name" placeholder="Tags"/>
+                <input type="submit" class="submit" value="Submit"><br>
+            </div>
 
-
-<form action="/post/create" method="post" enctype="multipart/form-data">
-    
-        <legend>Video information:</legend>
-        <div class="box"> 
-            Title:<br>
-            <input type="text" name="title"><br>
-            Description:<br>
-            <input type="text" name="description"><br>
-            Video URL:<br>
-            <input type="text" name="video_url" class="vid_form">
-        </div>
-
-        <h3>OR</h3>
-
-
-    <div class="box">
-        <div class="custom-file">
-            <input type="file"  name="video" class="custom-file-input fileInput shorten" id="customFile" ><br>
-            <label class="custom-file-label" for="customFile"></label>
-        </div>
-
-            <h3>Tags</h3>
-            <input type="text" name="tag_name"><br>
-            <input type="submit" style= "margin: 5px;"value="Submit"><br>
-        
-    </div>
-</form>
+            
+    </form>
+    <h3 class="sign-2 ">OR</h3>
+    <form action="/post/create" class="form1" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+            <div class="main bounceAnimation">
+                <p class="sign">Upload a file</p>
+                <input type="file"  name="video" class="custom-file-input fileInput shorten" id="customFile" ><br>
+                <label class="custom-file-label" for="customFile"></label>
+                <input class="un " type="text" name="title" placeholder="Title"/>               
+                <input class="un " type="text" name="description" placeholder="Description"/>
+                <h3 class="sign ">Tags</h3>
+                <input class="un"  type="text" name="tag_name" placeholder="Tags"/>
+                <input type="submit" class="submit" value="Submit"><br>
+            </div>
+    </form>
+</body>   
 
 <script type="application/javascript">  
     $('input[type="file"]').change(function(e){
