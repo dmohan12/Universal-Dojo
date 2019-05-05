@@ -5,6 +5,7 @@ gem 'sinatra-flash'
 gem 'google-api-client'
 gem 'fog'
 gem 'video_info'
+gem 'stripe'
 gem 'wdm', '>= 0.1.0' if Gem.win_platform?
 
 group :development do

@@ -18,8 +18,6 @@
 </style>
 
 
-
-
 <head>
     <link rel="stylesheet" type="text/css" href="<%= url('/main.css') %>" >
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
@@ -32,8 +30,8 @@
 
     <h3>Title: <%= v.title  %></h3> 
     <h4>Description: <%= v.description  %></h4>
-    <a data-fancybox href="<%=v.title %>">
-        <%=v.video_url%>
+    <a data-fancybox href="<%=v.video_url %>">
+        <img src="<%=v.thumbnail_image%>">
     </a>
     <br>
     
