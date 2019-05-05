@@ -1,7 +1,7 @@
 
-<head>
-    <link rel="stylesheet" type="text/css" href="<%= url('/main.css') %>" >
+<head>    
     <link rel="stylesheet" type="text/css" href="<%= url('/upload_style.css') %>" >
+    <link rel="stylesheet" type="text/css" href="<%= url('/main.css') %>" >
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
 
 
@@ -14,7 +14,7 @@
 </head>
 
   
-<body>
+<body >
     <form action="/post/create" class="form1" method="post">
             <div class="main bounceAnimation">
                 <p class="sign">Youtube Upload</p>
@@ -29,14 +29,14 @@
 
             
     </form>
-    <h3 class="sign-2 ">OR</h3>
+    <h3 class="sign-2 bounceAnimation">OR</h3>
     <form action="/post/create" class="form1" method="post" accept-charset="utf-8" enctype="multipart/form-data">
             <div class="main bounceAnimation">
                 <p class="sign">Upload a file</p>
-                <input type="file"  name="video" class="custom-file-input fileInput shorten" id="customFile" ><br>
-                <label class="custom-file-label" for="customFile"></label>
                 <input class="un " type="text" name="title" placeholder="Title"/>               
                 <input class="un " type="text" name="description" placeholder="Description"/>
+                <input type="file"  name="video" class="custom-file-input fileInput shorten" id="customFile" ><br>
+                <label class="custom-file-label " for="customFile" style="cursor: pointer; position: relative;"></label>
                 <h3 class="sign ">Tags</h3>
                 <input class="un"  type="text" name="tag_name" placeholder="Tags"/>
                 <input type="submit" class="submit" value="Submit"><br>
