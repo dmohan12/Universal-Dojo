@@ -6,21 +6,29 @@ enable :sessions
 set :session_secret, 'super secret'
 
 get "/login" do
+	
 	erb :"authentication/login"
+	
 end
 
 
 post "/process_login" do
-	email = params[:email]
-	password = params[:password]
+	if params["email"] != nil && params["password"] !=nil
+		email = params[:email]
+		password = params[:password]
 
-	user = User.first(email: email.downcase)
+		user = User.first(email: email.downcase)
 
-	if(user && user.login(password))
-		session[:user_id] = user.id
-		redirect "/"
+		if(user && user.login(password))
+			session[:user_id] = user.id
+			redirect "/"
+		else
+			flash[:error] = "Invalid login credentials"
+			redirect back
+		end
 	else
-		erb :"authentication/invalid_login"
+		flash[:error] = "Invalid login credentials"
+		redirect back
 	end
 end
 
@@ -35,6 +43,8 @@ end
 
 
 post "/register" do
+	if params["email"] && params["password"]
+	
 	email = params[:email]
 	password = params[:password]
 	username = params[:username]
@@ -50,7 +60,11 @@ post "/register" do
 
 	flash[:success] = "Successfully signed up"
 	redirect "/"
+	else
+		flash[:error] = "Username or Password not correct"
+		redirect back
 
+	end
 end
 
 #This method will return the user object of the currently signed in user

@@ -1,10 +1,10 @@
 body {
-  background: linear-gradient(to right, rgb(109, 122, 194), rgb(109, 194, 194));
+  background: rgb(255, 255, 255);
   font-family: "Ubuntu", sans-serif;
 }
 
 .main {
-  background-color: #ffffff;
+  background-color: #fafafa;
   width: 400px;
   height: 410px;
   margin: 7em auto;
@@ -65,8 +65,7 @@ form.form1 {
   font-family: "Ubuntu", sans-serif;
 }
 
-.un:focus,
-.pass:focus {
+.un:focus {
   border: 2px solid rgba(0, 0, 0, 0.18) !important;
 }
 
@@ -74,7 +73,7 @@ form.form1 {
   cursor: pointer;
   border-radius: 5em;
   color: #fff;
-  background: linear-gradient(to right, rgb(109, 122, 194), rgb(109, 194, 194));
+  background: black;
   border: 0;
   padding-left: 40px;
   padding-right: 40px;
