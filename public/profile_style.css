@@ -7,10 +7,21 @@
 
 } 
 
+.thumbnail{
+    width: 150px;
+    overflow: hidden;
+    float: left;
+}
+
+.container > *{
+    display: inline-block;
+}
+
 .videos_style {
     background-color: #fafafa;
-    margin: 10px auto;
-    margin-top: 20px;
+    margin-left: 10px;
+    margin-bottom: 20px;
+    
     width: 35%;
     border-radius: 5px;
     padding: 20px;
@@ -45,7 +56,8 @@
     border: 0px solid #000;
     border-bottom: 1px solid rgba(117, 117, 117, 0.12);
     box-sizing: border-box;
-    
+    display: block;
+  
 }
 
 .h2-uname{

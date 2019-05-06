@@ -6,16 +6,20 @@
     </button>
   
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <div class="d-flex justify-content-center">
+      <form class="form-inline my-2 my-lg-0" style="align-items: center;">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+      </div>
       <ul class="nav navbar-nav ml-lg-auto">
         
   
         <% if current_user %>
            <li class="nav-item">
-             <a class="nav-link" href="/dashboard"><i class="fas fa-user"></i></a>
+             <a class="nav-link" href="/profile"><i class="fas fa-user"></i></a>
            </li>
-           <li class="nav-item">
-             <a class="nav-link" href="/logout">Logout</a>
-           </li>
+           
             <li class="nav-item">
              <a class="nav-link" href="/post/new">Upload</a>
            </li>
@@ -32,7 +36,9 @@
             
              <a class="nav-link" href="/user/<%=current_user.id%>/notifications"><i class="fas fa-bell"></i></a>
            </li>
-
+           <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
+           </li>
         <% else %>
           <li class="nav-item">
             <a class="nav-link" href="/login">Login</a>
@@ -44,9 +50,6 @@
   
   
       </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>
+      
     </div>
 </nav>
