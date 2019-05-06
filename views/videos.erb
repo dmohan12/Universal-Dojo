@@ -5,7 +5,7 @@
 </head>
 
 <body >
-
+    <div class="container">
     <% @videos.each  do |v| %>
         
         <% @users.each do |u| %>
@@ -17,13 +17,23 @@
                         
                         <article class="videos_style">
                             <header class="header-user-video">
-                                <div>
+                                <div class="thumbnail">
                                    <h2 class="h2-uname" > <a data-fancybox href="<%=v.video_url %>">
-                                        <img src ="<%=v.thumbnail_image%>"><br>
-                                        <%=v.title%>
+                                        <img src ="<%=v.thumbnail_image%>"><br>  
                                     </a>
                                     </h2>
-                                    
+                                </div>
+                                <div >
+                                    <%=v.title%> <br><p> <a class="link" href="/users/<%=u.id%>/videos"> <%=u.email%></a> </h2> 
+                                </div>
+                                <strong> Tags: </strong>
+                                <%@tags.each do |t|%>
+
+                                    <%if t.video_id == v.id%>
+                                         <%=t.tag_name%> 
+                                    <%end%>
+                                    <%#t.destroy%>
+                                <%end%>
                                     <p><a class="link h2-uname" href="/users/<%=u.id%>/videos"> <%=u.email%> </a>
                                     <%if v.user_id == current_user.id || current_user.role_id == 0%>
                                     <form action="/post/<%=v.id%>/delete" method="get" style="display: inline;">
@@ -32,7 +42,7 @@
                                     <%end%>
                                     </p>
                                     
-                                </div>
+                              
                             </header>                
                             
                             <% #v.like_counter = 0%>
@@ -111,7 +121,7 @@
         
     <%end%>
     
-    
+    </div>
 
 
 </body>

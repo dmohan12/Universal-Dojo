@@ -71,14 +71,14 @@ get "/videos" do
 	erb :videos
 end
 
-get "/dashboard" do
+get "/profile" do
 	authenticate!
 	@videos = Video.all(user_id: current_user.id)
 	@tags = Tag.all
 	@comments = Comment.all
 	@users = User.all
 	@follows = Follow.all(follower_id: current_user.id)
-	erb :dashboard
+	erb :profile
 	#erb :videos
 end
 
