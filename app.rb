@@ -169,6 +169,10 @@ get "/post/:id/delete" do   #delete function
 			if v.user_id==current_user.id || current_user.role_id == 0
 				v.destroy
 				c.destroy
+				c=current_user.video_count-1
+				current_user.video_count=c
+				current_user.save
+
 				redirect back
 			else
 				erb :noPermission
