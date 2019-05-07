@@ -29,11 +29,37 @@ get "/" do
 	erb :index
 end
 
+get "/profile_test" do   #testing new profile page
+
+	authenticate!
+	@videos = Video.all(user_id: current_user.id)
+	@tags = Tag.all
+	@comments = Comment.all
+	@users = User.all
+	@follows = Follow.all(follower_id: current_user.id)
+
+	erb :profile_test
+end 
+
+get "/video/watch/:id" do   #Indidual video page TEST
+
+	authenticate!
+	@v=Video.all(id: params["id"])
+	@tags = Tag.all(video_id: params["id"])
+	@comments = Comment.all(video_id: params["id"])
+	@users = User.all
+	@follows = Follow.all(follower_id: current_user.id)
+	erb :watchVideo
+end 
+
+
 get "/users" do #shows all the users created
 	authenticate!
 	@users = User.all
 	erb :users
 end
+
+
 
 get "/users/:id/videos" do		#show other users dashboard
 	authenticate!
@@ -145,7 +171,7 @@ post "/post/create" do      #grabs backend code in creating a new post
 			end
 		end
 		
-		redirect "/dashboard"
+		redirect "/profile_test"
 
 	else 
 		erb :notPro
@@ -379,5 +405,3 @@ end
 get "/post/:id/search" do
 
 end
-
-

@@ -1,0 +1,44 @@
+<head>
+        <link rel="stylesheet" type="text/css" href="<%= url('/profile_style.css') %>" >
+    <link rel="stylesheet" type="text/css" href="<%= url('/main.css') %>" >
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+
+<body>
+
+<% @videos.each  do |v| %>
+
+    <div class="card" style="width: 18rem;">
+     <img class="card-img-top" src="<%=v.thumbnail_image%>" alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title"> <%=v.title%>  </h5>
+            <p class="card-text">
+                <%=v.description%>
+            </p>
+
+            <strong> Tags: </strong>
+            <%@tags.each do |t|%>
+                <%if t.video_id == v.id%>
+                    <%=t.tag_name%>, 
+                <%end%>
+                <%#t.destroy%>
+            <%end%>
+            <br>
+            <br>
+
+            <form action="/video/watch/<%=v.id%>" method="get">
+                <button type="submit" class="btn btn-primary" name="id">Video Page </button>
+            </form>
+
+        </div>
+    </div>
+
+<% end %>
+
+<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+</body>
+
