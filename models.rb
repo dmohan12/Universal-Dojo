@@ -41,7 +41,7 @@ class Video
   property :description, Text
   property :video_url, Text
   property :user_id, Integer
-  property :date, DateTime
+  property :created_on, Date
   property :like_counter, Integer, default: 0
   property :dislike_counter, Integer, default: 0
   property :thumbnail_image, Text
