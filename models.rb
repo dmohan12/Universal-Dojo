@@ -17,7 +17,9 @@ class User
     property :password, Text
     property :profile_image_url, Text
     property :created_at, DateTime
-    property :role_id, Integer, default: 0
+    property :role_id, Integer, :default => 1
+    property :video_count, Integer, :default => 0
+    property :pro, Boolean, :default => false
 
     def administrator?
       return role_id == 0
