@@ -117,7 +117,7 @@ get "/profile" do
 	@comments = Comment.all
 	@users = User.all
 	@follows = Follow.all(follower_id: current_user.id)
-	erb :profile
+	erb :profile_test
 	#erb :videos
 end
 
