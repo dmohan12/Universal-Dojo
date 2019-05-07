@@ -5,36 +5,72 @@
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+  <style>
+
+  
+  
+    .cards{
+        display:inline-block; 
+        border: none;
+        width: 18rem;
+        margin:20px;
+    }
+
+    .cardInfo{
+
+        text-align:center;
+  }
+  </style>
 </head>
 
 <body>
 
 <% @videos.each  do |v| %>
 
-    <div class="card" style="width: 18rem;">
-     <img class="card-img-top" src="<%=v.thumbnail_image%>" alt="Card image cap">
-        <div class="card-body">
-            <h5 class="card-title"> <%=v.title%>  </h5>
-            <p class="card-text">
-                <%=v.description%>
-            </p>
+    <div class="card cards">
+        <form action="/video/watch/<%=v.id%>" method="get">
+            <a href="video/watch/<%=v.id%>">
+                <div class="card-body cardInfo">
+                <img class="card-img-top" src="<%=v.thumbnail_image%>" name="id" alt="Card image cap">
 
-            <strong> Tags: </strong>
-            <%@tags.each do |t|%>
-                <%if t.video_id == v.id%>
-                    <%=t.tag_name%>, 
+                <h5 class="card-title" style="margin-bottom:-5px;"> <%=v.title%>  </h5>
+                <p class="card-text text-left" style="margin-bottom:-5px;" >
+                    <%=v.description%>
+                </p>
+
+                <div style="text-align:left; ">
+                <strong > Tags: </strong>
+                <%@tags.each do |t|%>
+                    <%if t.video_id == v.id%>
+                        <%=t.tag_name%>,
+                    <%end%>
                 <%end%>
-                <%#t.destroy%>
+                
+                </div>
+              
+                
+
+                 <div class="card-footer">
+                    <%=v.created_on%>
+                 </div>
+             </div>
+            
+            
+              </a>
+        </form>
+    
+        <div class="cardInfo">
+            <%if v.user_id == current_user.id || current_user.role_id == 0%>
+                <form action="/post/<%=v.id%>/delete" method="get">
+                    <button  type="sumbit" class="btn btn-primary" name="id" > Delete </button>
+                </form>
             <%end%>
-            <br>
-            <br>
-
-            <form action="/video/watch/<%=v.id%>" method="get">
-                <button type="submit" class="btn btn-primary" name="id">Video Page </button>
-            </form>
-
         </div>
+
     </div>
+
+        
+  
 
 <% end %>
 
