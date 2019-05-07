@@ -25,6 +25,18 @@ VideoInfo.provider_api_keys = { youtube: 'AIzaSyAnYcD4cc4Q69mfaj5on34oglsEylcIPm
 # if the user is signed in, current_user will refer to the signed in user object.
 # if they are not signed in, current_user will be nil\
 
+def youtube_embed(youtube_url)
+	if youtube_url[/youtu\.be\/([^\?]*)/]
+	  youtube_id = $1
+	else
+	  # Regex from # http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url/4811367#4811367
+	  youtube_url[/^.*((v\/)|(embed\/)|(watch\?))\??v?=?([^\&\?]*).*/]
+	  youtube_id = $5
+	end
+  
+	%Q{<iframe title="YouTube video player" width="640" height="390" src="https://www.youtube.com/embed/#{ youtube_id }" frameborder="0" allowfullscreen></iframe>}
+end
+
 get "/" do
 	erb :index
 end
@@ -45,9 +57,10 @@ get "/video/watch/:id" do   #Indidual video page TEST
 
 	authenticate!
 	@v=Video.all(id: params["id"])
+	video = Video.first(id: params["id"])
 	@tags = Tag.all(video_id: params["id"])
 	@comments = Comment.all(video_id: params["id"])
-	@users = User.all
+	@users_p = User.all(id: video.user_id)
 	@follows = Follow.all(follower_id: current_user.id)
 	erb :watchVideo
 end 
