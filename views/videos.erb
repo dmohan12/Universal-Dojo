@@ -18,9 +18,12 @@
                         <article class="videos_style">
                             <header class="header-user-video">
                                 <div class="thumbnail">
-                                   <h2 class="h2-uname" > <a data-fancybox href="<%=v.video_url %>">
+                                   <h2 class="h2-uname" > 
+                                   <form action="/videos/watch/<%=v.id%>" method="get" style="display: inline;">
+                                   <a href="<%=v.video_url %>">
                                         <img src ="<%=v.thumbnail_image%>"><br>  
                                     </a>
+                                    </form>
                                     </h2>
                                 </div>
                                 <div >
@@ -34,7 +37,7 @@
                                     <%end%>
                                     <%#t.destroy%>
                                 <%end%>
-                                    <p><a class="link h2-uname" href="/users/<%=u.id%>/videos"> <%=u.email%> </a>
+                                    
                                     <%if v.user_id == current_user.id || current_user.role_id == 0%>
                                     <form action="/post/<%=v.id%>/delete" method="get" style="display: inline;">
                                         <input  type="submit" class="del-button" name="delete" value="Delete" />
@@ -54,9 +57,9 @@
                             <%end%> 
                         </article>
                     
-            <%end%>
+                    <%end%>
 
-
+                <%end%>
                 <%if current_user.id == v.user_id #shows your videos%>
                     <br>
                     <div class="videos_style">
@@ -114,7 +117,7 @@
                         </div>
                         <%#v.destroy%>
                 <%end%>
-            <%end%>
+            
         <%end%>
 
 
