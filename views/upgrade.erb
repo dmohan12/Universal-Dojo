@@ -23,23 +23,23 @@
 
 <body style="text-align:center;">
     
-  <div class="main bounceAnimation">
+  <div class="main bounceAnimation moveDown">
     
         <form action="/charge" method="post" class="payment form1">
-        <div class="moveDown">
+        <div >
             <h3 class="sign">Go Pro</h3>
             <article class="un">
                 <label class="amount">
                 <span>Only cost $10.00 to Upgrade to PRO</span>
                 </label>
-            </article>
+            
 
             <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="<%= settings.publishable_key %>"
                 data-description="A month's subscription"
                 data-amount="1000"
                 data-locale="auto"></script>
-          
+            </article>
             </form> 
 
     </div>

@@ -17,7 +17,7 @@ class User
     property :password, Text
     property :profile_image_url, Text
     property :created_at, DateTime
-    property :role_id, Integer, :default => 1
+    property :role_id, Integer, :default => 0
     property :video_count, Integer, :default => 0
     property :pro, Boolean, :default => false
 
@@ -94,17 +94,6 @@ class Follow
 end
 
 
-class Request
-  include DataMapper::Resource
-  property :id, Serial
-  property :their_id, Integer
-  property :your_id, Integer
-  property :their_username, Text
-  property :your_username, Text
-  property :date, DateTime
-
-end
-
 # Perform basic sanity checks and initialize all relationships
 # Call this when you've defined all your models
 DataMapper.finalize
@@ -117,4 +106,3 @@ Like.auto_upgrade!
 Dislike.auto_upgrade!
 Comment.auto_upgrade!
 Tag.auto_upgrade!
-Request.auto_upgrade!
