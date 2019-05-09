@@ -40,6 +40,7 @@ class Video
   property :title, Text
   property :description, Text
   property :video_url, Text
+  property :s3_url, Text
   property :user_id, Integer
   property :created_on, Date
   property :like_counter, Integer, default: 0
