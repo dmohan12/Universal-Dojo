@@ -57,7 +57,6 @@ end
 class Dislike
   include DataMapper::Resource
   property :id, Serial
-  property :username, Text
   property :user_id, Integer
   property :video_id, Integer
 

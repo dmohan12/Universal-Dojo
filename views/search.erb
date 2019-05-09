@@ -23,10 +23,11 @@
   <body>
   
   
-    <div class="container">
+  <div class="container">
     <% @titles.each do |v| %>
-    
-         <div class="card cards">
+        <% if v.title[params[:title]]%>
+            
+            <div class="card cards">
         <form action="/video/watch/<%=v.id%>" method="get">
             <a href="video/watch/<%=v.id%>" style="color: inherit; text-decoration: none;">
                 <div class="card-body cardInfo">
@@ -61,13 +62,16 @@
                 </form>
             <%end%>
         </div>
+
     </div>
 
-            
-            
-        <% end %>
 
+
+
+        <% end %>
+    <% end %>
 </div>
   
-
+  
+  
   </body>
