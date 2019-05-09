@@ -5,10 +5,9 @@
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-  <style>
+</head>
 
-  
-  
+<style>
     .cards{
         display:inline-block; 
         border: none;
@@ -21,14 +20,13 @@
         text-align:center;
   }
   </style>
-</head>
-
-<body>
-
-<% @videos.each  do |v| %>
-<div class="cards">
-    <h3 style="margin-left: 30px;" ><%=current_user.email%></h3>
-    <div class="card " style="border: none;">
+  <body>
+  
+  
+    <div class="container">
+    <% @titles.each do |v| %>
+    
+         <div class="card cards">
         <form action="/video/watch/<%=v.id%>" method="get">
             <a href="video/watch/<%=v.id%>" style="color: inherit; text-decoration: none;">
                 <div class="card-body cardInfo">
@@ -63,15 +61,13 @@
                 </form>
             <%end%>
         </div>
-
     </div>
 
-        
-</div>  
+            
+            
+        <% end %>
 
-<% end %>
+</div>
+  
 
-<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
-</body>
-
+  </body>

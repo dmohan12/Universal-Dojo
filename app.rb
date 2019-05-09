@@ -44,7 +44,7 @@ end
 get "/profile_test" do   #testing new profile page
 
 	authenticate!
-	@videos = Video.all(user_id: current_user.id)
+	@videos = Video.all
 	@tags = Tag.all
 	@comments = Comment.all
 	@users = User.all
@@ -54,6 +54,18 @@ get "/profile_test" do   #testing new profile page
 end 
 
 get "/video/watch/:id" do   #Indidual video page TEST
+
+	authenticate!
+	@v=Video.all(id: params["id"])
+	video = Video.first(id: params["id"])
+	@tags = Tag.all(video_id: params["id"])
+	@comments = Comment.all(video_id: params["id"])
+	@users_p = User.all(id: video.user_id)
+	@follows = Follow.all(follower_id: current_user.id)
+	erb :watchVideo
+end 
+
+get "/posts/video/watch/:id" do   #copy of watchvidoe but boostrap forces /post maybe ?
 
 	authenticate!
 	@v=Video.all(id: params["id"])
@@ -75,12 +87,15 @@ end
 
 
 get "/users/:id/videos" do		#show other users dashboard
+
 	authenticate!
-	@user = User.all(id: params["id"])
 	@videos = Video.all(user_id: params["id"])
 	@tags = Tag.all
 	@comments = Comment.all
-	erb :user_profile
+	@users = User.all
+	@follows = Follow.all(follower_id: params["id"])
+
+	erb :profile_test
 end
 
 get "/users/:id/delete" do	#delete users if you are admin
@@ -414,6 +429,24 @@ authenticate!
 	erb :charge
 end 
 
-get "/post/:id/search" do
+get "/posts/search" do
+	 authenticate!
 
-end
+
+#	@videos = Video.all(title: params["title"]) #only loads videos with substring of title
+
+		@titles = Video.all
+
+	#tests
+
+	if @titles
+
+		@tags = Tag.all
+		@comments = Comment.all
+		@users = User.all
+		@follows = Follow.all(follower_id: current_user.id)
+		erb :search
+
+	end 
+
+end 
