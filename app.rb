@@ -64,6 +64,7 @@ get "/video/watch/:id" do   #Indidual video page TEST
 	@follows = Follow.all(follower_id: current_user.id)
 	erb :watchVideo
 end 
+
 get "/posts/video/watch/:id" do   #copy of watchvidoe but boostrap forces /post maybe ?
 
 	authenticate!
@@ -129,7 +130,6 @@ get "/profile" do
 	@videos = Video.all(user_id: current_user.id)
 	@tags = Tag.all
 	@comments = Comment.all
-	@users = User.all
 	@follows = Follow.all(follower_id: current_user.id)
 	erb :profile_test
 	#erb :videos
@@ -178,7 +178,7 @@ post "/post/create" do      #grabs backend code in creating a new post
 				:public => true
 			)
 				url=file2.public_url
-				vid.video_url=url
+				vid.s3_url=url
 				vid.title=params["title"]
 				vid.description=params["description"]
 				vid.user_id=current_user.id
@@ -435,7 +435,7 @@ get "/posts/search" do
 
 #	@videos = Video.all(title: params["title"]) #only loads videos with substring of title
 
-		@titles = Video.all
+	@titles = Video.all
 
 	#tests
 

@@ -17,7 +17,7 @@ class User
     property :password, Text
     property :profile_image_url, Text
     property :created_at, DateTime
-    property :role_id, Integer, :default => 1
+    property :role_id, Integer, :default => 0
     property :video_count, Integer, :default => 0
     property :pro, Boolean, :default => false
 
@@ -40,6 +40,7 @@ class Video
   property :title, Text
   property :description, Text
   property :video_url, Text
+  property :s3_url, Text
   property :user_id, Integer
   property :created_on, Date
   property :like_counter, Integer, default: 0
@@ -105,4 +106,3 @@ Like.auto_upgrade!
 Dislike.auto_upgrade!
 Comment.auto_upgrade!
 Tag.auto_upgrade!
-
