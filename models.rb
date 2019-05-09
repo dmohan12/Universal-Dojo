@@ -94,17 +94,6 @@ class Follow
 end
 
 
-class Request
-  include DataMapper::Resource
-  property :id, Serial
-  property :their_id, Integer
-  property :your_id, Integer
-  property :their_username, Text
-  property :your_username, Text
-  property :date, DateTime
-
-end
-
 # Perform basic sanity checks and initialize all relationships
 # Call this when you've defined all your models
 DataMapper.finalize
@@ -117,4 +106,4 @@ Like.auto_upgrade!
 Dislike.auto_upgrade!
 Comment.auto_upgrade!
 Tag.auto_upgrade!
-Request.auto_upgrade!
+
