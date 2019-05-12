@@ -1,0 +1,97 @@
+<style>
+
+.button{
+    margin:20px;
+    padding: 10px;
+
+}
+
+.videos_style {
+  background-color: silver;
+  color: black;
+  margin: 20px;
+  padding: 20px;
+}
+
+.comment_box {
+  background-color: gainsboro;
+  color: black;
+  margin: 5px;
+  padding: 5px;
+}
+
+</style>
+
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+</head>
+
+<h1>
+    <% @user.each do |u| %>
+        <%=u.email%>'s Profile
+        <form action="/user/<%=u.id%>/follow" method="get" style="display: inline;">
+            <input type="submit" value="Follow" name="follow" style="font-size:20px"/>  
+         </form>  
+
+    <%end%>
+
+</h1>
+
+<div class="videos_style">
+    <% @videos.each  do |v| %>
+    
+        <form action="/user/<%=v.user_id%>/follow" method="get" style="display: inline;">
+           <input type="submit" value="Follow" name="follow" style="font-size:20px"/>  
+        </form> 
+        <h3>Title: <%= v.title  %></h3> 
+        <h4>Description: <%= v.description  %></h4>
+        <a data-fancybox href="<%=v.video_url %>">
+           <strong> <%=v.title%> </strong>
+        </a>
+        <br>
+
+        <strong> Tags: </strong>
+        <%@tags.each do |t|%>
+
+            <%if t.video_id == v.id%>
+                 <%=t.tag_name%> 
+            <%end%>
+            <%#t.destroy%>
+        <%end%>
+        <br>
+        <strong> Comments: </strong>
+        <br>
+        <%@comments.each do |c|%>
+            <div class="container">
+                <%if c.video_id == v.id%>
+                    <div class="comment_box"><%=c.user_email%> said: <%=c.text%></div>
+        
+                <%end%>
+            </div>
+            <%#c.destroy%>
+        <%end%>  
+
+        <form action="/post/<%=v.id%>/comment" method="get" style="display: inline;">
+            Enter comment: <input type="text" name="text"/>
+            <input type="submit" value="Send" name="comment"/>  
+        </form>
+        <%if v.user_id == current_user.id || current_user.role_id == 0%>
+            <form action="/post/<%=v.id%>/delete" method="get">
+                <button  type="sumbit" class="button" name="id" > Delete </button>
+            </form>
+        <%end%>
+
+
+        <%#v.destroy%>
+
+    <% end %>
+</div>
+
+
+
+
+
+<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+

@@ -1,98 +1,132 @@
-<style>
-
-.button{
-    margin:20px;
-    padding: 10px;
-
-}
-
-.videos_style {
-  background-color: silver;
-  color: black;
-  margin: 20px;
-  padding: 20px;
-}
-
-.comment_box {
-  background-color: gainsboro;
-  color: black;
-  margin: 5px;
-  padding: 5px;
-}
-
-</style>
-
-
 <head>
+        <link rel="stylesheet" type="text/css" href="<%= url('/profile_style.css') %>" >
+    <link rel="stylesheet" type="text/css" href="<%= url('/main.css') %>" >
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <style>
+
+  
+  
+    .cards{
+        display:inline-block; 
+        border: none;
+        width: 18rem;
+        margin:20px;
+    }
+
+    .cardInfo{
+
+        text-align:center;
+  }
+  </style>
 </head>
 
+<body>
 
-<div class="videos_style">
+<% @videos.each  do |v| %>
+    <% @users.each do |u| %>
+        <%if u.id == v.user_id%>
+                
+        <%@follows.each do|f|%>
+                    
+            <%if f.followed_id == v.user_id && f.accepted == true #shows videos of ppl you follow%>
 
-    <% @videos.each  do |v| %>
+                <div class="card cards">
+                    <form action="/video/watch/<%=v.id%>" method="get">
+                        <a href="video/watch/<%=v.id%>" style="color: inherit; text-decoration: none;">
+                            <div class="card-body cardInfo">
+                            <img class="card-img-top" src="<%=v.thumbnail_image%>" name="id" alt="Card image cap">
 
-        <% @users.each do |u| %>
-            <%if u.id == v.user_id%>
-                <h2> <a class="link" href="/users/<%=u.id%>/videos"> <%=u.username%></a></h2>
-            <%end%>
-        <%end%>
+                            <h5 class="card-title" style="margin-bottom:-5px;"> <%=v.title%>  </h5>
+                            <p class="card-text text-left" style="margin-bottom:-5px;" >
+                                <%=v.description%>
+                            </p>
 
-
-        <h3>Title: <%= v.title  %></h3>
-        <h4>Description: <%= v.description  %></h4>
-        <a data-fancybox href="<%=v.video_url %>">
-           <strong> <%=v.title%> </strong>
-        </a>
-        <br>
-
-        <strong> Tags: </strong>
-        <%@tags.each do |t|%>
-
-            <%if t.video_id == v.id%>
-                 <%=t.tag_name%>
-            <%end%>
-            <%#t.destroy%>
-        <%end%>
-        <br>
-        <strong> Comments: </strong>
-        <br>
-        <%@comments.each do |c|%>
-            <div class="container">
-                <%if c.video_id == v.id%>
-                    <div class="comment_box"><%=c.user_email%> said: <%=c.text%></div>
-
-                <%end%>
-            </div>
-            <%#c.destroy%>
-        <%end%>
-
-        <form action="/post/<%=v.id%>/comment" method="get" style="display: inline;">
-            Enter comment: <input type="text" name="text"/>
-            <input type="submit" value="Send" name="comment"/>
-        </form>
-        <%if v.user_id == current_user.id || current_user.role_id == 0%>
-            <form action="/post/<%=v.id%>/delete" method="get">
-                <button  type="sumbit" class="button" name="id" > Delete </button>
-            </form>
-        <%end%>
-        <% #v.like_counter = 0%>
-
-        <form action="/post/like/<%=v.id%>" method="get"  >
-            <input type="submit" value="Like" name="Like"> Total Likes: <%= v.like_counter%>
-        </form>
-        <br>
-
-        <%#v.destroy%>
-    <%end%>
+                            <div style="text-align:left; ">
+                            <strong > Tags: </strong>
+                            <%@tags.each do |t|%>
+                                <%if t.video_id == v.id%>
+                                    <%=t.tag_name%>,
+                                <%end%>
+                            <%end%>
+                            <br>
+                            <strong><%=u.email%></strong>
+                            </div>
 
 
 
-</div>
+                             <div class="card-footer">
+                                <%=v.created_on%>
+                             </div>
+                         </div>
+
+
+                          </a>
+                    </form>
+
+                    <div class="cardInfo">
+                        <%if v.user_id == current_user.id || current_user.role_id == 0%>
+                            <form action="/post/<%=v.id%>/delete" method="get">
+                                <button  type="sumbit" class="btn btn-primary" name="id" > Delete </button>
+                            </form>
+                        <%end%>
+                    </div>
+
+                </div>
+            <% end %>
+            <%if current_user.id == v.user_id #shows your videos%>
+                <div class="card cards">
+                    <form action="/video/watch/<%=v.id%>" method="get">
+                        <a href="video/watch/<%=v.id%>" style="color: inherit; text-decoration: none;">
+                            <div class="card-body cardInfo">
+                            <img class="card-img-top" src="<%=v.thumbnail_image%>" name="id" alt="Card image cap">
+
+                            <h5 class="card-title" style="margin-bottom:-5px;"> <%=v.title%>  </h5>
+                            <p class="card-text text-left" style="margin-bottom:-5px;" >
+                                <%=v.description%>
+                            </p>
+
+                            <div style="text-align:left; ">
+                            <strong > Tags: </strong>
+                            <%@tags.each do |t|%>
+                                <%if t.video_id == v.id%>
+                                    <%=t.tag_name%>,
+                                <%end%>
+                            <%end%>
+                             <br>
+                            <strong><%=current_user.email%></strong>
+                            </div>
 
 
 
+                             <div class="card-footer">
+                                <%=v.created_on%>
+                             </div>
+                         </div>
 
+
+                          </a>
+                    </form>
+
+                    <div class="cardInfo">
+                        <%if v.user_id == current_user.id || current_user.role_id == 0%>
+                            <form action="/post/<%=v.id%>/delete" method="get">
+                                <button  type="sumbit" class="btn btn-primary" name="id" > Delete </button>
+                            </form>
+                        <%end%>
+                    </div>
+
+                </div>
+            <% end %>
+<% end %>
+<% end %>
+<% end %>  
+
+<% end %>
 
 <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+</body>
+

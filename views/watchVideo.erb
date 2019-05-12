@@ -1,0 +1,79 @@
+<head>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="<%= url('/videos_style.css') %>" >
+    <link rel="stylesheet" type="text/css" href="<%= url('/main.css') %>" >
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+</head>
+<%@v.each do |vid|%>
+<div class="videos_style">
+    
+    <div style="margin-top: 20px;  ">
+    <%if vid.video_url%>
+    <div >
+        <%=youtube_embed(vid.video_url)%>
+    </div>
+    <%else%>
+    <a data-fancybox href="<%=vid.s3_url %>">
+        <h4>Watch Me!</h4>
+    </a>
+    <%end%>
+    <div style="border-bottom: 1px solid gray; ">
+        <%@tags.each do |t|%>
+            <%if t.video_id == vid.id%>
+                 #<%=t.tag_name%> 
+            <%end%>
+            <%#t.destroy%>
+        <%end%>
+
+        <h3>Title: <%= vid.title  %> </h3> 
+        <div style="margin-bottom: 10px; text-align: right; letter-spacing: 1px;">
+            <a href="/post/like/<%=vid.id%>" style="color: inherit; text-decoration: none; font-size: 20px;"> <i class="fas fa-thumbs-up"></i> <%=vid.like_counter%> </a> 
+            <a href="/post/dislike/<%=vid.id%>" style="color: inherit; text-decoration: none; font-size: 20px;"> <i class="fas fa-thumbs-down"></i> <%=vid.dislike_counter%> </a>
+      
+        </div>
+
+    </div>
+    <div style="border-bottom: 1px solid gray;">
+        <%@users_p.each do |u|%>
+        <h2> <a class="link" href="/users/<%=u.id%>/videos"> <%=u.email%></a> </h2> 
+        <%end%>
+        <h4>Description: <%= vid.description  %></h4>
+    </div>
+    
+   
+    <div >
+        <P> Comments </P>
+            <div class="comment_box" >
+                <%@comments.each do |c|%>
+                <div class="container">
+                    <%if c.video_id == vid.id%>
+                        <strong> <%=c.user_email%> </strong> <%=c.text%>  
+                    <%end%>  
+                </div>
+                <%#c.destroy%>
+                <%end%>  
+            </div>
+            <div>
+                <form action="/post/<%=vid.id%>/comment" method="get" style="display: inline;">
+                    <input type="text" class="enter-comment" placeholder="Say something" name="text"/>
+                    <input type="submit" class="comment-send-button" value="Send" name="comment"/>  
+                </form>
+            </div>
+        <%if vid.user_id == current_user.id || current_user.role_id == 0%>
+            <form action="/post/<%=vid.id%>/delete" method="get" style="display: inline;">
+                <button  type="sumbit" class="button" name="id" > Delete </button>
+            </form>
+        <%end%>
+        <% #v.like_counter = 0%>
+        <% #v.dislike_counter = 0%>
+        <br>
+    
+        <%#v.destroy%>
+    </div>
+    </div>
+</div>
+        
+<%end%>
+
+<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>

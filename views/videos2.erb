@@ -1,0 +1,134 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="<%= url('/videos_style.css') %>" >
+    <link rel="stylesheet" type="text/css" href="<%= url('/main.css') %>" >
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+</head>
+
+<body >
+    <div class="container">
+    <% @videos.each  do |v| %>
+        
+        <% @users.each do |u| %>
+            <%if u.id == v.user_id%>
+                
+                <%@follows.each do|f|%>
+                    
+                    <%if f.followed_id == v.user_id && f.accepted == true #shows videos of ppl you follow%>
+                        
+                        <article class="videos_style">
+                            <header class="header-user-video">
+                                <div class="thumbnail">
+                                   <h2 class="h2-uname" > 
+                                   <form action="/videos/watch/<%=v.id%>" method="get" style="display: inline;">
+                                   <a href="<%=v.video_url %>">
+                                        <img src ="<%=v.thumbnail_image%>"><br>  
+                                    </a>
+                                    </form>
+                                    </h2>
+                                </div>
+                                <div >
+                                    <%=v.title%> <br><p> <a class="link" href="/users/<%=u.id%>/videos"> <%=u.email%></a> </h2> 
+                                </div>
+                                <strong> Tags: </strong>
+                                <%@tags.each do |t|%>
+
+                                    <%if t.video_id == v.id%>
+                                         <%=t.tag_name%> 
+                                    <%end%>
+                                    <%#t.destroy%>
+                                <%end%>
+                                    
+                                    <%if v.user_id == current_user.id || current_user.role_id == 0%>
+                                    <form action="/post/<%=v.id%>/delete" method="get" style="display: inline;">
+                                        <input  type="submit" class="del-button" name="delete" value="Delete" />
+                                    </form>
+                                    <%end%>
+                                    </p>
+                                    
+                              
+                            </header>                
+                            
+                            <% #v.like_counter = 0%>
+                            <% #v.dislike_counter = 0%>
+
+                            <%#v.destroy%>
+                            <%elsif f.followed_id == v.user_id && f.accepted == false #in case u dont follow anyone%>
+                                <h5> Follow someone to see their videos</h5>
+                            <%end%> 
+                        </article>
+                    
+                    <%end%>
+
+                <%end%>
+                <%if current_user.id == v.user_id #shows your videos%>
+                    <br>
+                    <div class="videos_style">
+                    <h2> <a class="link" href="/users/<%=u.id%>/videos"> <%=u.email%></a> </h2> 
+                        <h3>Title: <%= v.title  %></h3> 
+                        <h4>Description: <%= v.description  %></h4>
+                        <a data-fancybox href="<%=v.video_url %>">
+                            <% v.title %>
+                        </a>
+                        <br>
+
+                        <br>
+                        <strong> Tags: </strong>
+                        <%@tags.each do |t|%>
+
+                            <%if t.video_id == v.id%>
+                                 <%=t.tag_name%> 
+                            <%end%>
+                            <%#t.destroy%>
+                        <%end%>
+                        <br>
+                        <P> Comments </P>
+                            <div class="comment_box">
+                                <%@comments.each do |c|%>
+                                <div class="container">
+                                    <%if c.video_id == v.id%>
+                                        <strong> <%=c.user_email%> </strong> <%=c.text%>  
+                                    <%end%>  
+                                </div>
+                                <%#c.destroy%>
+                                <%end%>  
+                            </div>
+
+                            <form action="/post/<%=v.id%>/comment" method="get" style="display: inline;">
+                                <input type="text" class="enter-comment" placeholder="Say something" name="text"/>
+                                <input type="submit" class="comment-send-button" value="Send" name="comment"/>  
+                            </form>
+                        <%if v.user_id == current_user.id || current_user.role_id == 0%>
+                            <form action="/post/<%=v.id%>/delete" method="get" style="display: inline;">
+                                <button  type="sumbit" class="button" name="id" > Delete </button>
+                            </form>
+                        <%end%>
+                        <% #v.like_counter = 0%>
+                        <% #v.dislike_counter = 0%>
+
+                        <br>
+
+                        <form action="/post/like/<%=v.id%>" method="get" style="display: inline;" >
+                            <input type="submit" value="Like" name="Like"/> Total Likes: <%= v.like_counter%>
+                        </form>
+                        <form action="/post/dislike/<%=v.id%>" method="get" style="display: inline;"  >
+                            <input type="submit" value="Disike" name="Dislike"/> Total Dislikes: <%= v.dislike_counter%>
+                        </form>
+                        <br>
+                        </div>
+                        <%#v.destroy%>
+                <%end%>
+            
+        <%end%>
+
+
+        
+    <%end%>
+    
+    </div>
+
+
+</body>
+
+<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+

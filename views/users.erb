@@ -1,0 +1,38 @@
+<style>
+
+.button{
+    margin:20px;
+    padding: 10px;
+
+}
+
+</style>
+
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+     <link rel="stylesheet" type="text/css" href="<%= url('/main.css') %>" >
+    <link rel="stylesheet" type="text/css" href="<%= url('/upload_style.css') %>" >
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+</head>
+<h4>All existing users: </h4>
+<div class="container">
+    <% @users.each do |u| %>
+        Email: <a class="link" href="/users/<%=u.id%>/videos"> <%=u.email%> </a> 
+        <form action = "/users/<%=u.id%>/delete" method="get" style="display: inline;"> 
+        <input type="submit" value="Delete"/>
+         </form>
+            <form action="/user/<%=u.id%>/follow" method="get" style="display: inline;">
+            <input type="submit" value="Follow" name="follow" style="font-size:15px"/>  
+        </form> 
+
+        <% if (u.pro==true) %>
+            <p>Pro User</p>
+
+        <% else %>
+            <p>Free User</p>
+        <% end %>
+        <br>
+    <% end %>
+</div>

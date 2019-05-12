@@ -1,0 +1,77 @@
+<head>
+        <link rel="stylesheet" type="text/css" href="<%= url('/profile_style.css') %>" >
+    <link rel="stylesheet" type="text/css" href="<%= url('/main.css') %>" >
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <style>
+
+  
+  
+    .cards{
+        display:inline-block; 
+        border: none;
+        width: 18rem;
+        margin:20px;
+    }
+
+    .cardInfo{
+
+        text-align:center;
+  }
+  </style>
+</head>
+
+<body>
+
+<% @videos.each  do |v| %>
+<div class="cards">
+    <h3 style="margin-left: 30px;" ><%=current_user.email%></h3>
+    <div class="card " style="border: none;">
+        <form action="/video/watch/<%=v.id%>" method="get">
+            <a href="video/watch/<%=v.id%>" style="color: inherit; text-decoration: none;">
+                <div class="card-body cardInfo">
+                <img class="card-img-top" src="<%=v.thumbnail_image%>" name="id" alt="Card image cap">
+
+                <h5 class="card-title" style="margin-bottom:-5px;"> <%=v.title%>  </h5>
+                <p class="card-text text-left" style="margin-bottom:-5px;" >
+                    <%=v.description%>
+                </p>
+
+                <div style="text-align:left; ">
+                <strong > Tags: </strong>
+                <%@tags.each do |t|%>
+                    <%if t.video_id == v.id%>
+                        <%=t.tag_name%>,
+                    <%end%>
+                <%end%>
+                
+                </div>
+              
+                 <div class="card-footer">
+                    <%=v.created_on%>
+                 </div>
+             </div>
+              </a>
+        </form>
+    
+        <div class="cardInfo">
+            <%if v.user_id == current_user.id || current_user.role_id == 0%>
+                <form action="/post/<%=v.id%>/delete" method="get">
+                    <button  type="sumbit" class="btn btn-primary" name="id" > Delete </button>
+                </form>
+            <%end%>
+        </div>
+
+    </div>
+
+        
+</div>  
+
+<% end %>
+
+<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+</body>
+
