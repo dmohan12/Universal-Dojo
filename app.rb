@@ -162,8 +162,8 @@ post "/post/create" do      #grabs backend code in creating a new post
 					# create a connection
 			connection = Fog::Storage.new({
 				:provider                 => 'AWS',
-				:aws_access_key_id        =>'AKIAJGOZPYPJ7CN7OUAQ',
-				:aws_secret_access_key    => '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'
+				:aws_access_key_id        =>'copy access_key here',
+				:aws_secret_access_key    =>'copy secret access _key here'
 			})
 
 			#file = params[:video][:filename]
