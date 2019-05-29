@@ -9,8 +9,8 @@ require 'stripe'
 
 
 
-set :publishable_key, 'pk_test_jtKkZGQ3aijXByCqqPT8JBOV'
-set :secret_key, 'sk_test_lyiw0Yi6Rb6SkH0QgvfuYTpp'
+set :publishable_key, 'Insert stripe api key here'
+set :secret_key, 'Insert stripe secret key here'
 
 Stripe.api_key = settings.secret_key
 
