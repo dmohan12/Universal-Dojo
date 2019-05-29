@@ -14,7 +14,7 @@ set :secret_key, 'sk_test_lyiw0Yi6Rb6SkH0QgvfuYTpp'
 
 Stripe.api_key = settings.secret_key
 
-VideoInfo.provider_api_keys = { youtube: 'AIzaSyAnYcD4cc4Q69mfaj5on34oglsEylcIPmI', vimeo: 'e6dc9a7f6e15ae51ee4fcc50909210b6' }
+VideoInfo.provider_api_keys = { youtube:'insert youtube api key here' , vimeo: 'insert vimeo api key here' }
 
 #the following urls are included in authentication.rb
 # GET /login
