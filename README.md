@@ -11,6 +11,6 @@
 ### 7. Commenting on a post
 ### 8. Searching posts by title
 
-* This is still a ongoing project. Updates coming shortly. Feel free to add to it
+* This is still a ongoing project. Updates coming shortly and feel free to add to it.
 
 
